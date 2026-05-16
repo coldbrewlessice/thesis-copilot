@@ -1,0 +1,2431 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, shrink-to-fit=no">
+<title>Thesis Co-Pilot — Ultra-Smart Edition v5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous" onload="window._katexReady=true"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+/* ═══════════════════════════════════════════════════════
+   THESIS CO-PILOT ULTRA-SMART — ADAPTIVE DESIGN SYSTEM
+   Adaptive Grid: clamp()+vw/vh — dari HP kecil → Smart TV
+═══════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* ── Font scale: HP kecil 320px → Smart TV 4K 3840px ── */
+  --fs-xs:  clamp(10px,  0.65vw + 0.2vh,  15px);
+  --fs-sm:  clamp(11.5px,0.8vw  + 0.28vh, 18px);
+  --fs-base:clamp(13px,  1vw    + 0.35vh, 20px);
+  --fs-md:  clamp(14.5px,1.2vw  + 0.42vh, 24px);
+  --fs-lg:  clamp(17px,  1.55vw + 0.55vh, 32px);
+  --fs-xl:  clamp(20px,  2.1vw  + 0.75vh, 46px);
+  --fs-2xl: clamp(28px,  3.8vw  + 1.3vh,  76px);
+  /* ── Spacing scale ── */
+  --sp-1:clamp(3px,  0.35vw + 0.1vh,  8px);
+  --sp-2:clamp(6px,  0.65vw + 0.22vh, 14px);
+  --sp-3:clamp(10px, 1vw    + 0.35vh, 24px);
+  --sp-4:clamp(14px, 1.5vw  + 0.52vh, 36px);
+  --sp-5:clamp(18px, 2.2vw  + 0.78vh, 52px);
+  --sp-6:clamp(26px, 3.6vw  + 1.2vh,  88px);
+  /* ── Colors ── */
+  --bg:#f7f4ee;--surface:#fff;--surface2:#f2efe8;--surface3:#e8e4da;
+  --border:#ddd9ce;--border2:#ccc8bc;
+  --text:#1e1c18;--text2:#5a574e;--text3:#8a8780;
+  --green:#1b4332;--green2:#2d6a4f;--green3:#40916c;
+  --green-light:#d8f3dc;--green-text:#1b4332;
+  --gold:#b5843a;--gold-light:#fdf3e3;
+  --red:#c0392b;--red-light:#fdecea;
+  --blue:#1a5276;--blue-light:#eaf2fb;
+  --purple:#6c3483;--purple-light:#f5eef8;
+  --teal:#0e6655;--teal-light:#e8f8f5;
+  --orange:#ca6f1e;--orange-light:#fef9e7;
+  /* ── Border radius — skala ikut layar ── */
+  --radius:   clamp(8px, 0.6vw + 0.2vh,  18px);
+  --radius-sm:clamp(5px, 0.38vw + 0.12vh,11px);
+  --radius-lg:clamp(12px,1.1vw  + 0.38vh,28px);
+  /* ── Shadows ── */
+  --shadow:0 1px 4px rgba(0,0,0,.08);
+  --shadow-md:0 6px 20px rgba(0,0,0,.12);
+  --shadow-lg:0 18px 50px rgba(0,0,0,.2);
+  /* ── Layout tokens — dipakai header & sticky nav ── */
+  --header-h:clamp(50px, 5.5vh, 88px);
+  --tabnav-h:clamp(40px, 4.8vh, 72px);
+}
+html{scroll-behavior:smooth;text-size-adjust:100%;-webkit-text-size-adjust:100%;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:var(--fs-base);min-height:100svh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* ── LOGIN ── */
+#login-page{min-height:100svh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0d2b1e 0%,#1b4332 55%,#2d6a4f 100%);padding:var(--sp-4)}
+.login-card{background:var(--surface);border-radius:var(--radius-lg);width:100%;max-width:min(clamp(380px,34vw,620px),96vw);overflow:hidden;box-shadow:var(--shadow-lg)}
+.login-head{background:var(--green);padding:var(--sp-5) var(--sp-5) var(--sp-4);text-align:center}
+.login-logo{font-size:clamp(1.8rem,4vw,4.2rem);margin-bottom:var(--sp-2)}
+.login-title{font-family:'Crimson Pro',serif;font-size:var(--fs-xl);font-weight:700;color:#fff;letter-spacing:-.01em}
+.login-sub{font-size:var(--fs-xs);color:#a8d5ba;margin-top:var(--sp-1)}
+.login-body{padding:var(--sp-4) var(--sp-5)}
+.login-tabs{display:flex;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:var(--sp-4)}
+.ltab{flex:1;padding:var(--sp-2);text-align:center;cursor:pointer;font-size:var(--fs-sm);font-weight:500;border:none;background:transparent;color:var(--text2);font-family:'DM Sans',sans-serif;transition:all .12s}
+.ltab.active{background:var(--green);color:#fff}
+.auth-msg{padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-sm);font-size:var(--fs-xs);margin-bottom:var(--sp-3);display:none}
+.auth-err{background:var(--red-light);border:1px solid #f5c6c2;color:var(--red)}
+.auth-ok{background:var(--green-light);border:1px solid #95d5b2;color:var(--green-text)}
+.lfield{margin-bottom:var(--sp-3)}
+.lfield label{display:block;font-size:var(--fs-xs);font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:var(--sp-1)}
+.lfield input{width:100%;padding:var(--sp-2) var(--sp-3);border:1px solid var(--border2);border-radius:var(--radius-sm);font-size:var(--fs-sm);font-family:'DM Sans',sans-serif;color:var(--text);outline:none;transition:border-color .15s}
+.lfield input:focus{border-color:var(--green2);box-shadow:0 0 0 3px #2d6a4f18}
+.login-btn{width:100%;padding:var(--sp-3);background:var(--green);color:#fff;border:none;border-radius:var(--radius-sm);font-size:var(--fs-sm);font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:var(--sp-2)}
+.login-btn:hover{background:var(--green2)}
+.login-hint{font-size:var(--fs-xs);color:var(--text3);text-align:center;margin-top:var(--sp-3);line-height:1.6}
+.login-hint a{color:var(--green2)}
+
+/* ── APP SHELL ── */
+#app{display:none;flex-direction:column;min-height:100svh}
+.app-header{background:var(--green);padding:0 var(--sp-4);display:flex;align-items:center;gap:var(--sp-2);height:var(--header-h);position:sticky;top:0;z-index:100;flex-shrink:0}
+.logo-icon{width:clamp(28px,3.2vw,48px);height:clamp(28px,3.2vw,48px);background:#ffffff22;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:var(--fs-md);flex-shrink:0}
+.logo-text{font-family:'Crimson Pro',serif;font-size:var(--fs-md);font-weight:700;color:#fff;white-space:nowrap}
+.logo-ver{font-size:var(--fs-xs);color:#a8d5ba;background:#ffffff18;padding:1px 7px;border-radius:10px;margin-left:3px;white-space:nowrap}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:var(--sp-2)}
+.user-chip{display:flex;align-items:center;gap:var(--sp-2);background:#ffffff18;border:1px solid #ffffff25;border-radius:20px;padding:3px 10px 3px 3px;cursor:pointer;transition:background .12s}
+.user-chip:hover{background:#ffffff28}
+.user-ava{width:clamp(26px,2vw,42px);height:clamp(26px,2vw,42px);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:clamp(9px,0.7vw,14px);font-weight:700;flex-shrink:0}
+.user-name{font-size:var(--fs-xs);color:#d4f1e4;font-weight:500}
+.hdr-btn{background:transparent;border:1px solid #ffffff28;color:#a8d5ba;padding:clamp(4px,0.4vh,8px) clamp(8px,0.7vw,14px);border-radius:var(--radius-sm);font-size:clamp(11px,0.75vw,16px);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .12s}
+.hdr-btn:hover{background:#ffffff15;color:#fff}
+
+/* ── TAB NAV ── */
+.tab-nav{background:var(--surface);border-bottom:1.5px solid var(--border);display:flex;padding:0 var(--sp-3);position:sticky;top:var(--header-h);z-index:90;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.tab-nav::-webkit-scrollbar{display:none}
+.tab-btn{display:flex;align-items:center;gap:5px;padding:0 var(--sp-3);height:var(--tabnav-h);font-size:var(--fs-xs);font-weight:500;color:var(--text2);border:none;background:transparent;cursor:pointer;border-bottom:2.5px solid transparent;white-space:nowrap;transition:all .15s;font-family:'DM Sans',sans-serif;flex-shrink:0}
+.tab-btn:hover{color:var(--text);background:var(--surface2)}
+.tab-btn.active{color:var(--green);border-bottom-color:var(--green);font-weight:600}
+.tab-num{font-size:clamp(8px,0.55vw,11px);background:var(--surface2);color:var(--text3);padding:1px 5px;border-radius:10px}
+.tab-btn.active .tab-num{background:var(--green-light);color:var(--green-text)}
+
+/* ── MAIN ── */
+.app-main{flex:1;padding:var(--sp-4);max-width:min(1600px,100%);margin:0 auto;width:100%}
+.tab-panel{display:none}
+.tab-panel.active{display:block;animation:fadeIn .18s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* ── CARDS & COMMON ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:var(--sp-4);box-shadow:var(--shadow);margin-bottom:var(--sp-3)}
+.section-title{font-family:'Crimson Pro',serif;font-size:var(--fs-lg);font-weight:600;color:var(--text);margin-bottom:var(--sp-2);display:flex;align-items:center;gap:var(--sp-2)}
+.section-sub{font-size:var(--fs-sm);color:var(--text2);margin-bottom:var(--sp-4);line-height:1.65}
+label.lbl{display:block;font-size:var(--fs-xs);font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.045em;margin-bottom:var(--sp-1)}
+input[type=text],input[type=number],select,textarea{width:100%;padding:var(--sp-2) var(--sp-3);border:1px solid var(--border2);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:var(--fs-sm);color:var(--text);background:var(--surface);outline:none;transition:border-color .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--green2);box-shadow:0 0 0 3px #2d6a4f18}
+textarea{resize:vertical;min-height:88px;line-height:1.65}
+.field{margin-bottom:var(--sp-3)}
+.row2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:var(--sp-3)}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:var(--sp-2);padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:var(--fs-sm);font-weight:500;cursor:pointer;border:1px solid transparent;transition:all .15s;white-space:nowrap}
+.btn-primary{background:var(--green);color:#fff;border-color:var(--green)}
+.btn-primary:hover{background:var(--green2)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.btn-outline{background:transparent;color:var(--text);border-color:var(--border2)}
+.btn-outline:hover{background:var(--surface2)}
+.btn-pdf{background:var(--red-light);color:var(--red);border-color:#f5c6c2}
+.btn-pdf:hover{background:#f9d6d4}
+.btn-gold{background:var(--gold-light);color:var(--gold);border-color:#e8c97a}
+.btn-gold:hover{background:#fbefd5}
+.btn-purple{background:var(--purple-light);color:var(--purple);border-color:#d7bde2}
+.btn-teal{background:var(--teal-light);color:var(--teal);border-color:#a2d9ce}
+.btn-teal:hover{background:#d1f2eb}
+.btn-danger{background:var(--red-light);color:var(--red);border-color:#f5c6c2}
+.btn-danger:hover{background:#f9d6d4}
+.btn-full{width:100%;justify-content:center}
+.btn-sm{padding:var(--sp-1) var(--sp-2);font-size:var(--fs-xs)}
+
+/* ── MISC ── */
+.disclaimer{background:var(--gold-light);border:1px solid #e8c97a;border-left:3px solid var(--gold);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:var(--sp-2) var(--sp-3);font-size:var(--fs-xs);color:#7a5c1e;line-height:1.6;margin-bottom:var(--sp-3)}
+.spinner{width:15px;height:15px;border:2px solid #ffffff40;border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;flex-shrink:0}
+.spinner-dark{border-color:var(--border2);border-top-color:var(--green)}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── SIDANG ── */
+.examiner-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(180px,100%),1fr));gap:var(--sp-3);margin-bottom:var(--sp-4)}
+.exam-card{border:2px solid var(--border2);border-radius:var(--radius);padding:var(--sp-3) var(--sp-2);cursor:pointer;transition:all .15s;text-align:center;background:var(--surface)}
+.exam-card:hover,.exam-card.selected{border-color:var(--green);background:var(--green-light)}
+.exam-emoji{font-size:var(--fs-xl);display:block;margin-bottom:var(--sp-2)}
+.exam-name{font-family:'Crimson Pro',serif;font-size:var(--fs-md);font-weight:600;color:var(--text);display:block}
+.exam-tag{font-size:var(--fs-xs);color:var(--text2);margin-top:var(--sp-1);line-height:1.4}
+.chat-header-card{background:var(--green);color:#fff;border-radius:var(--radius);padding:var(--sp-3) var(--sp-4);display:flex;align-items:center;gap:var(--sp-3);margin-bottom:var(--sp-2)}
+.prof-ava{width:clamp(42px,3.5vw,72px);height:clamp(42px,3.5vw,72px);border-radius:50%;background:#ffffff22;border:1.5px solid #ffffff40;display:flex;align-items:center;justify-content:center;font-size:clamp(18px,2.2vw,36px);flex-shrink:0}
+.prof-name{font-family:'Crimson Pro',serif;font-size:var(--fs-md);font-weight:600;margin-bottom:2px}
+.prof-role{font-size:var(--fs-xs);color:#a8d5ba}
+.q-pill{margin-left:auto;background:#ffffff20;border:1px solid #ffffff30;color:#d4f1e4;font-size:var(--fs-xs);padding:3px 10px;border-radius:20px;white-space:nowrap}
+.prog-bar{height:clamp(3px,0.28vh,6px);background:var(--border);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:var(--green3);border-radius:2px;transition:width .4s ease}
+.chat-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-top:var(--sp-2)}
+.chat-messages{min-height:clamp(200px,28vh,400px);max-height:clamp(240px,42vh,720px);overflow-y:auto;padding:var(--sp-4);display:flex;flex-direction:column;gap:var(--sp-3)}
+.msg{display:flex;gap:var(--sp-2);max-width:88%}
+.msg-ai{align-self:flex-start}
+.msg-user{align-self:flex-end;flex-direction:row-reverse}
+.msg-ava{width:clamp(28px,2.2vw,46px);height:clamp(28px,2.2vw,46px);border-radius:50%;flex-shrink:0;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:clamp(11px,0.85vw,18px);align-self:flex-end}
+.bubble{padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-sm);font-size:var(--fs-sm);line-height:1.75;white-space:pre-wrap;word-break:break-word}
+.bubble-ai{background:var(--surface2);border:1px solid var(--border);border-top-left-radius:3px}
+.bubble-user{background:var(--green);color:#fff;border-top-right-radius:3px}
+.typing{display:flex;gap:4px;padding:3px 0;align-items:center}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--text3);animation:blink 1.2s infinite}
+.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+.chat-input-bar{border-top:1px solid var(--border);padding:var(--sp-2) var(--sp-3);display:flex;gap:var(--sp-2);align-items:flex-end;background:var(--surface)}
+.chat-input-bar textarea{flex:1;min-height:clamp(36px,3.8vh,56px);max-height:clamp(100px,14vh,180px);resize:none;font-size:var(--fs-sm)}
+.mic-btn{padding:8px 10px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:var(--surface);font-size:16px;cursor:pointer;color:var(--text2);transition:all .12s;align-self:flex-end;flex-shrink:0}
+.mic-btn.rec{background:var(--red-light);border-color:#f5c6c2;color:var(--red);animation:micPulse 1s infinite}
+@keyframes micPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08);box-shadow:0 0 0 4px #f5c6c240}}
+.mic-status{font-size:var(--fs-xs);color:var(--red);min-height:12px;margin-top:2px}
+.score-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:var(--sp-5);text-align:center}
+.grade-display{font-family:'Crimson Pro',serif;font-size:clamp(64px,10vw,180px);font-weight:700;line-height:1;margin:var(--sp-3) 0}
+.grade-A{color:#1b5e20}.grade-B{color:#1a5276}.grade-C{color:#7d6608}.grade-D{color:#c0392b}
+.grade-lbl{font-size:var(--fs-md);color:var(--text2);margin-bottom:var(--sp-4)}
+.score-body{text-align:left;background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--border);padding:var(--sp-4);font-size:var(--fs-sm);line-height:1.8;white-space:pre-wrap;max-height:clamp(240px,30vh,640px);overflow-y:auto}
+
+/* ── ANALISIS ── */
+.chap-sel{display:flex;gap:var(--sp-2);flex-wrap:wrap;margin-bottom:var(--sp-3)}
+.chap-btn{padding:var(--sp-1) var(--sp-3);border-radius:20px;font-size:var(--fs-xs);font-weight:500;border:1px solid var(--border2);background:var(--surface);color:var(--text2);cursor:pointer;transition:all .12s;font-family:'DM Sans',sans-serif}
+.chap-btn:hover{background:var(--surface2)}
+.chap-btn.active{background:var(--green);color:#fff;border-color:var(--green)}
+.chap-ctx{background:var(--green-light);border:1px solid #95d5b2;color:var(--green-text);padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-sm);font-size:var(--fs-xs);line-height:1.6;margin-bottom:var(--sp-3)}
+.analysis-result{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;display:none;margin-top:var(--sp-3)}
+.res-header{background:var(--surface2);border-bottom:1px solid var(--border);padding:var(--sp-2) var(--sp-4);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--sp-2)}
+.res-title{font-family:'Crimson Pro',serif;font-size:var(--fs-md);font-weight:600}
+.res-body{padding:var(--sp-4);font-size:var(--fs-sm);line-height:1.85;white-space:pre-wrap}
+.score-row{display:flex;gap:var(--sp-2);padding:var(--sp-3) var(--sp-4);border-top:1px solid var(--border);background:var(--surface2);flex-wrap:wrap}
+.score-chip{display:flex;flex-direction:column;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:var(--sp-2) var(--sp-3);min-width:70px}
+.chip-num{font-family:'Crimson Pro',serif;font-size:var(--fs-xl);font-weight:700;line-height:1}
+.chip-lbl{font-size:var(--fs-xs);color:var(--text2);margin-top:2px;text-align:center}
+
+/* ── KERANGKA ── */
+.outline-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-top:var(--sp-3)}
+.outline-hd{background:var(--green);color:#fff;padding:var(--sp-2) var(--sp-4);font-family:'Crimson Pro',serif;font-weight:600;font-size:var(--fs-md);display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);flex-wrap:wrap}
+.outline-body{padding:var(--sp-4);font-size:var(--fs-sm);line-height:1.85;white-space:pre-wrap;max-height:clamp(320px,46vh,960px);overflow-y:auto}
+.copy-btn{background:#ffffff20;border:1px solid #ffffff35;color:#d4f1e4;padding:3px 10px;border-radius:20px;font-size:var(--fs-xs);cursor:pointer;font-family:'DM Sans',sans-serif}
+.copy-btn:hover{background:#ffffff30}
+
+/* ── KONSISTENSI ── */
+.kons-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:var(--sp-3)}
+.result-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:var(--fs-xs);font-weight:500}
+.badge-ok{background:var(--green-light);color:var(--green-text)}
+.badge-warn{background:var(--gold-light);color:#7a5c1e}
+.badge-err{background:var(--red-light);color:var(--red)}
+.issues-list{display:flex;flex-direction:column;gap:var(--sp-2);margin-top:var(--sp-3)}
+.issue-item{padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-sm);font-size:var(--fs-sm);line-height:1.65;display:flex;gap:var(--sp-2)}
+.issue-critical{background:var(--red-light);border-left:3px solid var(--red)}
+.issue-warn{background:var(--gold-light);border-left:3px solid var(--gold)}
+.issue-ok{background:var(--green-light);border-left:3px solid #40916c}
+
+/* ── POLESAN ── */
+.style-opts{display:flex;gap:var(--sp-2);flex-wrap:wrap;margin-bottom:var(--sp-3)}
+.style-opt{padding:var(--sp-1) var(--sp-3);border-radius:20px;font-size:var(--fs-xs);font-weight:500;border:1px solid var(--border2);background:var(--surface);color:var(--text2);cursor:pointer;transition:all .12s;font-family:'DM Sans',sans-serif}
+.style-opt:hover{background:var(--surface2)}
+.style-opt.active{background:var(--purple);color:#fff;border-color:var(--purple)}
+.polesan-result{display:none;margin-top:var(--sp-3)}
+.pol-res-box{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:var(--sp-4);font-size:var(--fs-sm);line-height:1.85;white-space:pre-wrap;max-height:clamp(280px,42vh,860px);overflow-y:auto}
+.math-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:var(--sp-3);min-height:56px;font-size:var(--fs-sm);line-height:1.8;overflow-x:auto}
+
+/* ── SITASI ── */
+.cit-tabs{display:flex;gap:var(--sp-2);margin-bottom:var(--sp-4);flex-wrap:wrap}
+.cit-tab{padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-sm);font-size:var(--fs-sm);font-weight:500;border:1px solid var(--border2);background:var(--surface);color:var(--text2);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.cit-tab.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+.cit-formats{display:flex;flex-direction:column;gap:var(--sp-2);margin-top:var(--sp-3)}
+.cit-block{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:var(--sp-3)}
+.cit-block-label{font-size:var(--fs-xs);font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.06em;margin-bottom:var(--sp-1)}
+.cit-block-text{font-size:var(--fs-sm);color:var(--text);line-height:1.65;word-break:break-word}
+.bib-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius-sm)}
+.bib-table{width:100%;border-collapse:collapse;min-width:480px}
+.bib-table th{background:var(--surface2);color:var(--text2);font-weight:600;padding:var(--sp-2) var(--sp-3);text-align:left;border-bottom:2px solid var(--border);font-size:var(--fs-xs);text-transform:uppercase;letter-spacing:.04em}
+.bib-table td{padding:var(--sp-2) var(--sp-3);border-bottom:1px solid var(--border);vertical-align:top;color:var(--text);line-height:1.55;font-size:var(--fs-xs)}
+.bib-table tr:last-child td{border-bottom:none}
+.bib-table tr:hover td{background:var(--surface2)}
+.empty-bib{text-align:center;padding:var(--sp-6);color:var(--text3);font-size:var(--fs-sm)}
+.fmt-pills{display:flex;gap:var(--sp-2);margin-bottom:var(--sp-3)}
+.fmt-pill{padding:var(--sp-1) var(--sp-3);border-radius:20px;font-size:var(--fs-xs);border:1px solid var(--border2);background:var(--surface);color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .12s}
+.fmt-pill:hover{background:var(--surface2)}
+.fmt-pill.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+
+/* ── PROGRES ── */
+.roadmap{display:flex;flex-direction:column;gap:var(--sp-2);margin-bottom:var(--sp-4)}
+.road-step{display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-3) var(--sp-4);background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);transition:all .25s}
+.road-step.done{border-color:var(--green3);background:var(--green-light)}
+.road-num{width:clamp(34px,2.8vw,56px);height:clamp(34px,2.8vw,56px);border-radius:50%;background:var(--surface2);border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:'Crimson Pro',serif;font-size:var(--fs-md);font-weight:700;flex-shrink:0;transition:all .25s}
+.road-step.done .road-num{background:var(--green);border-color:var(--green);color:#fff}
+.road-info{flex:1;min-width:0}
+.road-title{font-weight:600;font-size:var(--fs-sm);color:var(--text)}
+.road-sub{font-size:var(--fs-xs);color:var(--text2);margin-top:2px}
+.road-chk{width:clamp(16px,1.4vw,26px);height:clamp(16px,1.4vw,26px);accent-color:var(--green);cursor:pointer;flex-shrink:0}
+.ring-wrap{display:flex;align-items:center;justify-content:center;margin:var(--sp-3) 0}
+.ring-svg{transform:rotate(-90deg)}
+.daily-bar-wrap{background:var(--surface2);border-radius:20px;height:clamp(8px,0.7vh,18px);overflow:hidden;margin-top:var(--sp-2);border:1px solid var(--border)}
+.daily-bar{height:100%;background:var(--green3);border-radius:20px;transition:width .6s ease}
+.daily-pct-txt{font-size:var(--fs-sm);color:var(--text2);margin-top:var(--sp-2)}
+.ses-counts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(130px,100%),1fr));gap:var(--sp-3);margin-top:var(--sp-4)}
+.ses-cnt-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:var(--sp-3);text-align:center}
+.ses-cnt-num{font-family:'Crimson Pro',serif;font-size:var(--fs-xl);font-weight:700;color:var(--green)}
+.ses-cnt-lbl{font-size:var(--fs-xs);color:var(--text2);margin-top:2px}
+
+/* ── RIWAYAT ── */
+.history-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-3);flex-wrap:wrap;gap:var(--sp-2)}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100px,100%),1fr));gap:var(--sp-2);margin-bottom:var(--sp-4)}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:var(--sp-3);text-align:center}
+.stat-num{font-family:'Crimson Pro',serif;font-size:var(--fs-2xl);font-weight:700;line-height:1;color:var(--green)}
+.stat-lbl{font-size:var(--fs-xs);color:var(--text2);margin-top:3px}
+.export-all-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:var(--sp-3) var(--sp-4);margin-bottom:var(--sp-3);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--sp-2)}
+.export-all-bar p{font-size:var(--fs-sm);color:var(--text2)}
+.hist-filters{display:flex;gap:var(--sp-2);flex-wrap:wrap;margin-bottom:var(--sp-3)}
+.hfilt{padding:var(--sp-1) var(--sp-3);border-radius:20px;font-size:var(--fs-xs);border:1px solid var(--border2);background:var(--surface);color:var(--text2);cursor:pointer;transition:all .12s;font-family:'DM Sans',sans-serif}
+.hfilt:hover{background:var(--surface2)}
+.hfilt.active{background:var(--green);color:#fff;border-color:var(--green)}
+.hist-list{display:flex;flex-direction:column;gap:var(--sp-2)}
+.hist-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:var(--sp-3) var(--sp-4);display:flex;align-items:flex-start;gap:var(--sp-3);transition:all .15s}
+.hist-item:hover{border-color:var(--green2);box-shadow:var(--shadow-md)}
+.hist-icon{width:clamp(36px,3vw,58px);height:clamp(36px,3vw,58px);border-radius:var(--radius-sm);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:clamp(14px,1.2vw,22px)}
+.hist-icon-sidang{background:var(--green-light)}.hist-icon-analisis{background:var(--blue-light)}
+.hist-icon-kerangka{background:var(--gold-light)}.hist-icon-konsistensi{background:var(--purple-light)}
+.hist-icon-polesan{background:var(--teal-light)}.hist-icon-sitasi{background:var(--orange-light)}
+.hist-body{flex:1;min-width:0}
+.hist-title{font-weight:500;font-size:var(--fs-sm);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hist-meta{font-size:var(--fs-xs);color:var(--text2);margin-top:3px;display:flex;gap:var(--sp-3);flex-wrap:wrap}
+.hist-actions{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+.hist-grade{font-family:'Crimson Pro',serif;font-size:var(--fs-xl);font-weight:700}
+.item-btns{display:flex;gap:4px;opacity:0;transition:opacity .15s}
+.hist-item:hover .item-btns{opacity:1}
+.empty-hist{text-align:center;padding:3rem 1rem;color:var(--text3);font-size:var(--fs-sm)}
+.empty-hist .eicon{font-size:2.4rem;margin-bottom:var(--sp-3);opacity:.4}
+.snap-item{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:var(--sp-2) var(--sp-3);display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);flex-wrap:wrap}
+.snap-name{font-size:var(--fs-sm);font-weight:500}.snap-date{font-size:var(--fs-xs);color:var(--text3)}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:none;align-items:center;justify-content:center;padding:var(--sp-3);backdrop-filter:blur(3px)}
+.modal-overlay.open{display:flex;animation:fadeIn .15s ease}
+.modal-box{background:var(--surface);border-radius:var(--radius-lg);width:100%;max-width:min(clamp(580px,58vw,1100px),96vw);max-height:88svh;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow-lg)}
+.modal-head{background:var(--green);color:#fff;padding:var(--sp-3) var(--sp-4);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-head h3{font-family:'Crimson Pro',serif;font-size:var(--fs-md);font-weight:600}
+.modal-head-actions{display:flex;align-items:center;gap:var(--sp-2)}
+.modal-close{background:transparent;border:none;color:#a8d5ba;font-size:clamp(18px,1.5vw,28px);cursor:pointer;line-height:1;padding:0}
+.modal-body{padding:var(--sp-4);overflow-y:auto;flex:1;font-size:var(--fs-sm);line-height:1.8;white-space:pre-wrap}
+.modal-body.prose{white-space:normal}
+
+/* ── FOOTER / TOAST ── */
+.app-footer{background:var(--surface);border-top:1px solid var(--border);padding:var(--sp-2) var(--sp-4);text-align:center;font-size:var(--fs-xs);color:var(--text3);line-height:1.5}
+#toast{position:fixed;bottom:clamp(14px,2.5vw,28px);right:clamp(14px,2.5vw,28px);background:var(--text);color:#fff;padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-sm);font-size:var(--fs-sm);z-index:9999;opacity:0;transform:translateY(8px);transition:all .2s;pointer-events:none;max-width:min(clamp(300px,28vw,520px),92vw)}
+#toast.show{opacity:1;transform:none}
+::-webkit-scrollbar{width:clamp(4px,0.35vw,8px);height:clamp(4px,0.35vw,8px)}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+.katex{font-size:1.05em}.katex-display{overflow-x:auto;padding:var(--sp-2) 0}
+
+/* ── PARAFRASA & ANTI-PLAGIARISM ── */
+.para-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:var(--sp-3);margin-top:var(--sp-3)}
+.orig-box,.para-box{border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm);line-height:1.75;min-height:120px;white-space:pre-wrap;word-break:break-word}
+.orig-box{background:var(--red-light);border:1px solid #f5c6c2}
+.para-box{background:var(--green-light);border:1px solid #95d5b2}
+.sim-bar-wrap{height:10px;border-radius:20px;overflow:hidden;background:var(--surface2);border:1px solid var(--border);margin:var(--sp-2) 0}
+.sim-bar-fill{height:100%;border-radius:20px;transition:width .7s ease}
+.sim-low{background:var(--green3)}.sim-mid{background:var(--gold)}.sim-high{background:var(--red)}
+.para-ver-tabs{display:flex;gap:var(--sp-2);margin-bottom:var(--sp-3);flex-wrap:wrap}
+.para-ver-btn{padding:var(--sp-1) var(--sp-3);border-radius:20px;font-size:var(--fs-xs);font-weight:500;border:1px solid var(--border2);background:var(--surface);color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .12s}
+.para-ver-btn:hover{background:var(--surface2)}
+.para-ver-btn.active{background:var(--green);color:#fff;border-color:var(--green)}
+
+/* ── SMART REFERENCE FINDER ── */
+.ref-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:var(--sp-3) var(--sp-4);margin-bottom:var(--sp-2);transition:all .15s}
+.ref-card:hover{border-color:var(--blue);box-shadow:var(--shadow-md)}
+.ref-title-link{font-family:'Crimson Pro',serif;font-size:var(--fs-md);font-weight:600;color:var(--blue);line-height:1.4;display:block;text-decoration:none;margin-bottom:var(--sp-1)}
+.ref-title-link:hover{text-decoration:underline}
+.ref-meta{font-size:var(--fs-xs);color:var(--text2);display:flex;gap:var(--sp-3);flex-wrap:wrap;margin-bottom:var(--sp-2)}
+.ref-abstract{font-size:var(--fs-xs);color:var(--text2);line-height:1.65;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.ref-badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;padding:2px 8px;border-radius:20px;background:var(--blue-light);color:var(--blue);font-weight:600}
+.ref-oa{background:var(--green-light);color:var(--green-text)}
+.skeleton{background:linear-gradient(90deg,var(--surface2) 25%,var(--surface3) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:var(--radius-sm)}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ── STATISTICAL GUIDE WIZARD ── */
+.stat-wizard{display:flex;flex-direction:column;gap:var(--sp-3)}
+.wiz-q{border:2px solid var(--border);border-radius:var(--radius);padding:var(--sp-3) var(--sp-4);transition:all .2s;display:none}
+.wiz-q.active{display:block;border-color:var(--green2);background:#f8fdf9}
+.wiz-q.answered{display:block;border-color:var(--green3);background:var(--green-light);opacity:.8}
+.wiz-q-header{display:flex;align-items:center;gap:var(--sp-2);margin-bottom:var(--sp-3)}
+.wiz-q-num{width:clamp(26px,2.2vw,44px);height:clamp(26px,2.2vw,44px);border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:var(--fs-xs);flex-shrink:0}
+.wiz-q.answered .wiz-q-num{background:var(--green3)}
+.wiz-q-text{font-weight:600;font-size:var(--fs-sm);color:var(--text)}
+.wiz-opts{display:flex;gap:var(--sp-2);flex-wrap:wrap}
+.wiz-opt{padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-sm);font-size:var(--fs-xs);font-weight:500;border:1.5px solid var(--border2);background:var(--surface);color:var(--text2);cursor:pointer;transition:all .12s;font-family:'DM Sans',sans-serif;line-height:1.4}
+.wiz-opt:hover{border-color:var(--green2);background:var(--green-light);color:var(--green-text)}
+.wiz-opt.chosen{border-color:var(--green);background:var(--green);color:#fff}
+.stat-rec-box{background:var(--blue-light);border:2px solid #aed6f1;border-radius:var(--radius);padding:var(--sp-4);margin-top:var(--sp-3);display:none}
+.stat-rec-name{font-family:'Crimson Pro',serif;font-size:var(--fs-xl);font-weight:700;color:var(--blue);margin-bottom:var(--sp-2)}
+.stat-rec-body{font-size:var(--fs-sm);line-height:1.8;white-space:pre-wrap}
+
+/* ── WELLNESS / POMODORO ── */
+.pomo-float{position:fixed;bottom:clamp(16px,2.5vw,32px);left:clamp(16px,2.5vw,32px);z-index:200}
+.pomo-fab{width:clamp(48px,3.8vw,76px);height:clamp(48px,3.8vw,76px);border-radius:50%;background:var(--green);border:none;cursor:pointer;font-size:clamp(18px,1.6vw,32px);box-shadow:var(--shadow-md);transition:all .2s;display:flex;align-items:center;justify-content:center;color:#fff}
+.pomo-fab:hover{background:var(--green2);transform:scale(1.08)}
+.pomo-fab.running{background:var(--red);animation:pomoPulse 2s infinite}
+.pomo-fab.break{background:var(--blue)}
+@keyframes pomoPulse{0%,100%{box-shadow:var(--shadow-md)}50%{box-shadow:0 0 0 8px #c0392b28}}
+.pomo-panel{position:absolute;bottom:calc(clamp(48px,3.8vw,76px) + 10px);left:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);width:min(clamp(280px,22vw,400px),92vw);box-shadow:var(--shadow-lg);overflow:hidden;display:none;animation:fadeIn .15s ease}
+.pomo-ph{background:var(--green);color:#fff;padding:var(--sp-2) var(--sp-3);display:flex;align-items:center;justify-content:space-between}
+.pomo-ph h4{font-family:'Crimson Pro',serif;font-size:var(--fs-md);font-weight:600}
+.pomo-ph .pomo-x{background:transparent;border:none;color:#a8d5ba;font-size:18px;cursor:pointer;padding:0;line-height:1}
+.pomo-content{padding:var(--sp-3)}
+.pomo-ring-container{display:flex;justify-content:center;position:relative;margin-bottom:var(--sp-2)}
+.pomo-ring-svg{transform:rotate(-90deg)}
+.pomo-time-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Crimson Pro',serif;font-size:clamp(28px,5.5vw,52px);font-weight:700;color:var(--green);line-height:1}
+.pomo-mode-label{text-align:center;font-size:var(--fs-xs);color:var(--text2);margin-bottom:var(--sp-3);font-weight:500}
+.pomo-ctrls{display:flex;gap:var(--sp-2);justify-content:center;margin-bottom:var(--sp-3)}
+.pomo-cycle{text-align:center;font-size:var(--fs-xs);color:var(--text3);margin-bottom:var(--sp-2)}
+.quote-card{background:var(--gold-light);border:1px solid #e8c97a;border-radius:var(--radius-sm);padding:var(--sp-2) var(--sp-3);font-size:var(--fs-xs);color:#7a5c1e;line-height:1.65;font-style:italic;cursor:pointer;transition:background .12s}
+.quote-card:hover{background:#fbefd5}
+
+/* ── KOLABORASI / REVIEW MODE ── */
+.collab-info{background:var(--blue-light);border:1px solid #aed6f1;border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm);line-height:1.65;color:var(--blue);margin-bottom:var(--sp-4)}
+.report-preview{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-top:var(--sp-3);display:none}
+.rp-head{background:var(--green);color:#fff;padding:var(--sp-3) var(--sp-4);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--sp-2)}
+.rp-head-title{font-family:'Crimson Pro',serif;font-size:var(--fs-md);font-weight:600}
+.rp-body{padding:var(--sp-4);font-size:var(--fs-sm);line-height:1.8;max-height:clamp(280px,40vh,840px);overflow-y:auto}
+.rp-section{margin-bottom:var(--sp-4);padding-bottom:var(--sp-4);border-bottom:1px solid var(--border)}
+.rp-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.rp-section-title{font-family:'Crimson Pro',serif;font-size:var(--fs-lg);font-weight:600;color:var(--green);margin-bottom:var(--sp-2);display:flex;align-items:center;gap:var(--sp-2)}
+.rp-item{background:var(--surface2);border-radius:var(--radius-sm);padding:var(--sp-2) var(--sp-3);font-size:var(--fs-xs);line-height:1.7;margin-bottom:var(--sp-2)}
+.rp-item-label{font-weight:600;color:var(--text2);margin-bottom:3px}
+.collab-note-input{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:var(--sp-2) var(--sp-3);font-size:var(--fs-sm);width:100%;min-height:clamp(70px,8vh,140px);resize:vertical;font-family:'DM Sans',sans-serif}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+   375px HP kecil → 768px Tablet → 1400px Desktop
+   → 1920px FHD → 2560px 2K/QHD → 3840px 4K UHD
+═══════════════════════════════════════════════ */
+
+/* ── HP SANGAT KECIL ≤ 375px ── */
+@media(max-width:375px){
+  .logo-text,.logo-ver{display:none}
+  .tab-btn{padding:0 var(--sp-2)}
+  .chat-header-card{flex-wrap:wrap}
+  .examiner-grid{grid-template-columns:1fr 1fr}
+  .score-row{flex-direction:column}
+  .res-header{flex-direction:column;align-items:flex-start}
+}
+
+/* ── HP STANDAR ≤ 600px ── */
+@media(max-width:600px){
+  .row2{grid-template-columns:1fr}
+  .header-right .hdr-btn:not(:last-child){display:none}
+  .user-name{max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .kons-grid{grid-template-columns:1fr}
+  .para-cols{grid-template-columns:1fr}
+  .score-row{flex-wrap:wrap}
+  .stat-rec-box{padding:var(--sp-3)}
+  .item-btns{opacity:1}
+  .bib-wrap{font-size:var(--fs-xs)}
+}
+
+/* ── TABLET 601px – 1024px ── */
+@media(min-width:601px) and (max-width:1024px){
+  .app-main{padding:var(--sp-3) var(--sp-4)}
+  .examiner-grid{grid-template-columns:repeat(3,1fr)}
+}
+
+/* ── LARGE DESKTOP 1400px+ ── */
+@media(min-width:1400px){
+  .app-main{padding:var(--sp-5) var(--sp-6)}
+  .card{padding:var(--sp-5)}
+  .examiner-grid{grid-template-columns:repeat(4,1fr)}
+  .ses-counts{grid-template-columns:repeat(4,1fr)}
+  .stats-row{grid-template-columns:repeat(6,1fr)}
+  .chat-input-bar textarea{min-height:clamp(42px,4vh,60px)}
+  .bib-table th,.bib-table td{padding:var(--sp-3) var(--sp-4)}
+  .sim-bar-wrap{height:14px}
+  .spinner{width:clamp(15px,1.1vw,22px);height:clamp(15px,1.1vw,22px)}
+  .mic-btn{padding:clamp(8px,0.7vh,14px) clamp(10px,0.9vw,18px)}
+}
+
+/* ── 2K / QHD 2560px+ ── */
+@media(min-width:2560px){
+  :root{
+    --header-h:clamp(76px,5.2vh,100px);
+    --tabnav-h:clamp(58px,4.5vh,80px);
+  }
+  .app-main{max-width:min(2000px,94vw);padding:var(--sp-5) var(--sp-6)}
+  .card{padding:var(--sp-5);margin-bottom:var(--sp-4)}
+  .login-card{max-width:min(680px,50vw)}
+  .modal-box{max-width:min(1200px,72vw)}
+  .pomo-panel{width:min(clamp(360px,18vw,480px),88vw)}
+  .examiner-grid{grid-template-columns:repeat(5,1fr)}
+  .road-step{padding:var(--sp-4) var(--sp-5)}
+  .tab-nav{border-bottom-width:2px}
+  .tab-btn{border-bottom-width:3px}
+  .dot{width:7px;height:7px}
+  .typing{gap:6px}
+  .spinner{width:clamp(18px,1vw,26px);height:clamp(18px,1vw,26px);border-width:3px}
+  .prog-bar{height:5px}
+  .sim-bar-wrap{height:16px}
+  .daily-bar-wrap{height:clamp(12px,0.8vh,20px)}
+  .bib-table th,.bib-table td{padding:var(--sp-3) var(--sp-5)}
+  .ref-badge{font-size:var(--fs-xs);padding:3px 10px}
+  .result-badge{padding:5px 14px}
+  .empty-hist{padding:4rem 2rem}
+  .empty-hist .eicon{font-size:3.5rem}
+}
+
+/* ── 4K UHD 3840px+ ── */
+@media(min-width:3840px){
+  :root{
+    --header-h:clamp(90px,4.8vh,120px);
+    --tabnav-h:clamp(68px,4.2vh,96px);
+  }
+  .app-main{max-width:min(2800px,92vw);padding:var(--sp-6)}
+  .card{padding:var(--sp-6);border-radius:var(--radius-lg);margin-bottom:var(--sp-5)}
+  .login-card{max-width:min(860px,30vw)}
+  .modal-box{max-width:min(1600px,62vw)}
+  .pomo-panel{width:min(clamp(420px,14vw,580px),85vw)}
+  .pomo-time-text{font-size:clamp(52px,4.5vw,80px)}
+  .examiner-grid{grid-template-columns:repeat(6,1fr)}
+  .ses-counts{grid-template-columns:repeat(6,1fr)}
+  .stats-row{grid-template-columns:repeat(8,1fr)}
+  .msg{max-width:78%}
+  .msg-ava{width:clamp(46px,2.2vw,68px);height:clamp(46px,2.2vw,68px);font-size:clamp(16px,1.1vw,24px)}
+  .bubble{border-radius:var(--radius)}
+  .dot{width:9px;height:9px}
+  .typing{gap:8px;padding:5px 0}
+  .spinner{width:clamp(22px,0.9vw,32px);height:clamp(22px,0.9vw,32px);border-width:3px}
+  .prog-bar{height:7px}
+  .sim-bar-wrap{height:20px}
+  .daily-bar-wrap{height:clamp(16px,0.9vh,24px)}
+  .road-num{border-width:3px}
+  .road-chk{width:clamp(22px,1.2vw,34px);height:clamp(22px,1.2vw,34px)}
+  .tab-nav{border-bottom-width:2.5px}
+  .tab-btn{border-bottom-width:4px}
+  .bib-table th,.bib-table td{padding:var(--sp-4) var(--sp-5)}
+  .ref-badge{font-size:clamp(10px,0.5vw,14px);padding:4px 14px}
+  .result-badge{padding:6px 18px}
+  .score-chip{min-width:clamp(90px,6vw,160px)}
+  .q-pill{padding:5px 16px}
+  .login-logo{font-size:clamp(3rem,5vw,6.5rem)}
+  .empty-hist{padding:6rem 3rem}
+  .empty-hist .eicon{font-size:5rem}
+  .grade-display{font-size:clamp(140px,8vw,260px)}
+  #toast{max-width:min(clamp(380px,20vw,680px),88vw)}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ LOGIN ══════════ -->
+<div id="login-page">
+  <div class="login-card">
+    <div class="login-head">
+      <div class="login-logo">🎓</div>
+      <div class="login-title">Thesis Co-Pilot</div>
+      <div class="login-sub">Ultra-Smart Edition · v4.0</div>
+    </div>
+    <div class="login-body">
+      <div class="login-tabs">
+        <button class="ltab active" id="ltab-masuk" onclick="toggleAuthTab('masuk')">Masuk</button>
+        <button class="ltab" id="ltab-daftar" onclick="toggleAuthTab('daftar')">Daftar</button>
+      </div>
+      <div id="auth-err" class="auth-msg auth-err"></div>
+      <div id="auth-ok" class="auth-msg auth-ok"></div>
+      <div class="lfield"><label for="auth-user">Nama Pengguna</label><input id="auth-user" type="text" placeholder="cth. budi_mahasiswa" onkeydown="if(event.key==='Enter')doAuth()"></div>
+      <div class="lfield"><label for="auth-pass">Kata Sandi</label><input id="auth-pass" type="password" placeholder="minimal 4 karakter" onkeydown="if(event.key==='Enter')doAuth()"></div>
+      <div class="lfield" id="field-nama" style="display:none"><label for="auth-nama">Nama Lengkap</label><input id="auth-nama" type="text" placeholder="cth. Budi Santoso"></div>
+      <div class="lfield" id="field-prodi" style="display:none"><label for="auth-prodi">Program Studi</label><input id="auth-prodi" type="text" placeholder="cth. Manajemen, Teknik Informatika..."></div>
+      <div class="lfield" style="border-top:1px solid var(--border);padding-top:.75rem;margin-top:.1rem">
+        <label for="login-api-key" style="display:flex;align-items:center;gap:6px;font-size:var(--fs-xs);font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">🔑 Groq API Key<span style="font-size:9px;background:#fdf3e3;color:#7a5c1e;border:1px solid #e8c97a;border-radius:10px;padding:1px 7px;font-weight:500;text-transform:none">Wajib</span></label>
+        <input id="login-api-key" type="password" placeholder="gsk_..." autocomplete="off" oninput="saveApiKeyLive(this.value)" style="font-family:monospace;font-size:11px;letter-spacing:.03em;margin-top:5px">
+        <div id="api-key-status" style="font-size:10px;margin-top:3px;min-height:12px"></div>
+      </div>
+      <button class="login-btn" onclick="doAuth()" id="auth-btn">Masuk →</button>
+      <div id="ls-warning" style="display:none;margin-top:.75rem;background:#fdecea;border:1px solid #f5c6c2;border-radius:6px;padding:8px 12px;font-size:10.5px;color:#c0392b;line-height:1.6">
+        ⚠️ <strong>Penyimpanan browser tidak tersedia.</strong> Data tidak akan tersimpan permanen. Coba buka file ini di Chrome/Firefox (bukan mode Incognito), dan pastikan bukan dari dalam viewer PDF/iframe.
+      </div>
+      <p class="login-hint">Data tersimpan di browser (localStorage).<br>Groq API key gratis di <a href="https://console.groq.com" target="_blank">console.groq.com</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ APP ══════════ -->
+<div id="app">
+  <header class="app-header">
+    <div class="logo-icon">🎓</div>
+    <span class="logo-text">Thesis Co-Pilot</span>
+    <span class="logo-ver">Ultra v5</span>
+    <div class="header-right">
+      <div class="user-chip" onclick="switchTab('riwayat')">
+        <div class="user-ava" id="hdr-ava" style="background:#a8d5ba">BM</div>
+        <span class="user-name" id="hdr-name">Pengguna</span>
+      </div>
+      <button class="hdr-btn" title="Pengaturan API Key" onclick="openApiModal()">⚙️</button>
+      <button class="hdr-btn" onclick="logout()">Keluar</button>
+    </div>
+  </header>
+
+  <nav class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('sidang')" id="tab-sidang">⚖️ Sidang <span class="tab-num" id="qcount-badge">0/7</span></button>
+    <button class="tab-btn" onclick="switchTab('analisis')" id="tab-analisis">📖 Analisis</button>
+    <button class="tab-btn" onclick="switchTab('kerangka')" id="tab-kerangka">📋 Kerangka</button>
+    <button class="tab-btn" onclick="switchTab('konsistensi')" id="tab-konsistensi">🔍 Konsistensi</button>
+    <button class="tab-btn" onclick="switchTab('polesan')" id="tab-polesan">✍️ Polesan</button>
+    <button class="tab-btn" onclick="switchTab('sitasi')" id="tab-sitasi">📚 Sitasi</button>
+    <button class="tab-btn" onclick="switchTab('progres')" id="tab-progres">📊 Progres</button>
+    <button class="tab-btn" onclick="switchTab('riwayat')" id="tab-riwayat">📂 Riwayat <span class="tab-num" id="hist-badge">0</span></button>
+    <button class="tab-btn" onclick="switchTab('parafrasa')" id="tab-parafrasa">🔄 Parafrasa</button>
+    <button class="tab-btn" onclick="switchTab('referensi')" id="tab-referensi">🔎 Referensi</button>
+    <button class="tab-btn" onclick="switchTab('statistik')" id="tab-statistik">📐 Statistik</button>
+    <button class="tab-btn" onclick="switchTab('kolaborasi')" id="tab-kolaborasi">🤝 Kolaborasi</button>
+  </nav>
+
+  <main class="app-main">
+    <div class="disclaimer">⚠ <strong>Disclaimer:</strong> Alat bantu latihan AI. Penilaian resmi tetap wewenang dosen penguji Anda.</div>
+
+    <!-- ═══ TAB: SIDANG ═══ -->
+    <div class="tab-panel active" id="panel-sidang">
+      <div id="setup-area">
+        <div class="card">
+          <div class="section-title">⚖️ Ruang Sidang Virtual</div>
+          <p class="section-sub">Pilih karakter dosen penguji, isi data skripsi, lalu hadapi 7 pertanyaan bertingkat. Jawab dengan <strong>mengetik atau berbicara</strong> — Web Speech API terintegrasi &amp; auto-kirim!</p>
+          <label class="lbl" style="margin-bottom:.6rem">Pilih Karakter Dosen Penguji</label>
+          <div class="examiner-grid">
+            <div class="exam-card selected" data-profile="killer" onclick="selectExaminer(this)">
+              <span class="exam-emoji">👨‍💼</span>
+              <span class="exam-name">Prof. Suharto</span>
+              <div class="exam-tag">Dosen Killer<br>Kritis &amp; Tak Kenal Ampun</div>
+            </div>
+            <div class="exam-card" data-profile="metodologi" onclick="selectExaminer(this)">
+              <span class="exam-emoji">👩‍🔬</span>
+              <span class="exam-name">Dr. Kartika</span>
+              <div class="exam-tag">Pakar Metodologi<br>Fokus Validitas &amp; Statistik</div>
+            </div>
+            <div class="exam-card" data-profile="penyelamat" onclick="selectExaminer(this)">
+              <span class="exam-emoji">🧑‍🏫</span>
+              <span class="exam-name">Dr. Bima</span>
+              <div class="exam-tag">Penguji Konstruktif<br>Membangun &amp; Memandu</div>
+            </div>
+          </div>
+          <div class="field"><label class="lbl">Judul Skripsi</label><textarea id="s-judul" rows="2" placeholder="Tulis judul lengkap skripsi Anda..."></textarea></div>
+          <div class="row2">
+            <div class="field"><label class="lbl">Jurusan / Prodi</label><input id="s-jurusan" type="text" placeholder="cth. Manajemen..."></div>
+            <div class="field"><label class="lbl">Metode Penelitian</label><input id="s-metode" type="text" placeholder="cth. Kuantitatif, SEM..."></div>
+          </div>
+          <div class="field"><label class="lbl">Hasil &amp; Temuan Utama</label><textarea id="s-hasil" rows="3" placeholder="Ringkasan hasil, nilai signifikansi, temuan penting..."></textarea></div>
+          <div class="row2">
+            <div class="field"><label class="lbl">Ukuran Sampel</label><input id="s-sampel" type="text" placeholder="cth. 120 responden"></div>
+            <div class="field"><label class="lbl">Variabel Utama</label><input id="s-var" type="text" placeholder="cth. X1: Media Sosial, Y: Konsumtif"></div>
+          </div>
+          <button class="btn btn-primary btn-full" onclick="startSidang()">⚖️ Mulai Sidang Sekarang</button>
+        </div>
+      </div>
+      <div id="sidang-area" style="display:none">
+        <div class="chat-header-card">
+          <div class="prof-ava" id="prof-ava">👨‍💼</div>
+          <div><div class="prof-name" id="prof-name">Prof. Dr. H. Suharto Wibisono, M.Si.</div><div class="prof-role" id="prof-role">Ketua Dewan Penguji</div></div>
+          <div class="q-pill" id="q-pill">0 / 7</div>
+        </div>
+        <div class="prog-bar"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+        <div class="chat-box">
+          <div class="chat-messages" id="chat-msgs"></div>
+          <div class="chat-input-bar">
+            <div style="flex:1;display:flex;flex-direction:column;gap:2px">
+              <textarea id="chat-in" placeholder="Ketik jawaban… (Enter = kirim, Shift+Enter = baris baru)" rows="2" onkeydown="chatKey(event)"></textarea>
+              <div class="mic-status" id="mic-status"></div>
+            </div>
+            <button class="mic-btn" id="mic-btn" onclick="toggleMic()" title="Jawab dengan suara (auto-kirim saat selesai)">🎙️</button>
+            <button class="btn btn-primary btn-sm" id="send-btn" onclick="sendChat()" style="align-self:flex-end">Kirim ➤</button>
+          </div>
+        </div>
+        <button class="btn btn-outline btn-sm" style="margin-top:.5rem" onclick="resetSidang()">↺ Reset</button>
+      </div>
+      <div id="score-area" style="display:none">
+        <div class="score-card">
+          <div style="font-family:'Crimson Pro',serif;font-size:var(--fs-lg);font-weight:600;margin-bottom:.5rem">📜 Hasil Penilaian Sidang</div>
+          <div class="grade-display" id="grade-display">—</div>
+          <div class="grade-lbl" id="grade-label"></div>
+          <div class="score-body" id="score-body"></div>
+          <div style="display:flex;gap:var(--sp-2);margin-top:var(--sp-4);justify-content:center;flex-wrap:wrap">
+            <button class="btn btn-pdf" onclick="exportLastSession()">📄 Export PDF</button>
+            <button class="btn btn-outline" onclick="resetSidang()">↺ Sesi Baru</button>
+            <button class="btn btn-outline" onclick="switchTab('riwayat')">📂 Riwayat</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ TAB: ANALISIS ═══ -->
+    <div class="tab-panel" id="panel-analisis">
+      <div class="card">
+        <div class="section-title">📖 Analisis Bab — Chapter-Aware AI</div>
+        <p class="section-sub">Pilih bab → AI secara otomatis menyesuaikan fokus analisis: dari identifikasi masalah (Bab 1) hingga evaluasi simpulan (Bab 5). Upload file .txt atau paste teks langsung.</p>
+        <div class="chap-sel">
+          <button class="chap-btn active" data-chap="1" onclick="selChap(this)">Bab 1 — Pendahuluan</button>
+          <button class="chap-btn" data-chap="2" onclick="selChap(this)">Bab 2 — Tinjauan Pustaka</button>
+          <button class="chap-btn" data-chap="3" onclick="selChap(this)">Bab 3 — Metodologi</button>
+          <button class="chap-btn" data-chap="4" onclick="selChap(this)">Bab 4 — Hasil &amp; Pembahasan</button>
+          <button class="chap-btn" data-chap="5" onclick="selChap(this)">Bab 5 — Kesimpulan</button>
+        </div>
+        <div class="chap-ctx" id="chap-ctx">💡 Konteks AI: Ketajaman identifikasi masalah, kejelasan rumusan &amp; tujuan, relevansi latar belakang, signifikansi penelitian.</div>
+        <div class="field"><label class="lbl">Teks Bab</label><textarea id="bab-text" rows="9" placeholder="Paste teks bab di sini (min. 100 kata)..."></textarea></div>
+        <div class="field">
+          <label class="lbl">📎 Upload File Teks (.txt / .md)</label>
+          <input type="file" id="bab-file" accept=".txt,.md" onchange="loadBabFile(this)" style="width:100%;padding:var(--sp-2);border:1px dashed var(--border2);border-radius:var(--radius-sm);font-size:var(--fs-xs);cursor:pointer;background:var(--surface2)">
+        </div>
+        <div class="row2">
+          <div class="field"><label class="lbl">Bidang Ilmu</label><input id="bab-jur" type="text" placeholder="cth. Psikologi, Ekonomi..."></div>
+          <div class="field"><label class="lbl">Fokus Analisis</label>
+            <select id="bab-fokus"><option value="umum">Umum (Chapter-Aware)</option><option value="logika">Logika &amp; Alur</option><option value="sitasi">Sitasi &amp; Referensi</option><option value="bahasa">Tata Bahasa</option><option value="metodologi">Kesesuaian Metodologi</option></select>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-full" onclick="analisisbab()" id="analis-btn">🔬 Analisis Sekarang</button>
+      </div>
+      <div class="analysis-result" id="analisis-result">
+        <div class="res-header">
+          <span class="res-title" id="res-title">Hasil Analisis</span>
+          <div style="display:flex;gap:var(--sp-2)">
+            <button class="btn btn-pdf btn-sm" onclick="exportLastSession()">📄 PDF</button>
+            <button class="btn btn-outline btn-sm" onclick="copyEl('analisis-body')">⎘ Salin</button>
+          </div>
+        </div>
+        <div class="score-row" id="score-chips"></div>
+        <div class="res-body" id="analisis-body"></div>
+      </div>
+    </div>
+
+    <!-- ═══ TAB: KERANGKA ═══ -->
+    <div class="tab-panel" id="panel-kerangka">
+      <div class="card">
+        <div class="section-title">📋 Generator Kerangka Skripsi</div>
+        <p class="section-sub">Isi detail penelitian → kerangka Bab 1–5 siap pakai + export PDF.</p>
+        <div class="field"><label class="lbl">Topik / Judul Tentatif</label><textarea id="k-topik" rows="2" placeholder="cth. Pengaruh Kepemimpinan Transformasional terhadap Kinerja..."></textarea></div>
+        <div class="row2">
+          <div class="field"><label class="lbl">Program Studi</label><input id="k-jur" type="text" placeholder="cth. Manajemen SDM"></div>
+          <div class="field"><label class="lbl">Pendekatan</label><select id="k-met"><option>Kuantitatif</option><option>Kualitatif</option><option>Mixed Methods</option><option>Studi Kasus</option><option>Eksperimental</option><option>Deskriptif</option></select></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label class="lbl">Variabel</label><input id="k-var" type="text" placeholder="cth. X: Kepemimpinan, Y: Kinerja"></div>
+          <div class="field"><label class="lbl">Lokus Penelitian</label><input id="k-lokus" type="text" placeholder="cth. PT PLN Persero..."></div>
+        </div>
+        <div class="field"><label class="lbl">Informasi Tambahan (opsional)</label><input id="k-ket" type="text" placeholder="Teori yang ingin digunakan, dll."></div>
+        <button class="btn btn-primary btn-full" onclick="genKerangka()" id="ker-btn">✨ Generate Kerangka Skripsi</button>
+      </div>
+      <div id="outline-result"></div>
+    </div>
+
+    <!-- ═══ TAB: KONSISTENSI ═══ -->
+    <div class="tab-panel" id="panel-konsistensi">
+      <div class="card">
+        <div class="section-title">🔍 Cek Konsistensi &amp; Logika Antar Bab</div>
+        <p class="section-sub">AI mendeteksi apakah hipotesis Bab 1 masih sejalan dengan kesimpulan Bab 5 — plus inkonsistensi metodologi vs temuan.</p>
+        <div class="kons-grid">
+          <div class="field"><label class="lbl">Metodologi / Hipotesis (Bab 1 &amp; 3)</label><textarea id="k-metode" rows="10" placeholder="Paste teks metodologi dan/atau hipotesis..."></textarea></div>
+          <div class="field"><label class="lbl">Hasil, Pembahasan &amp; Kesimpulan (Bab 4 &amp; 5)</label><textarea id="k-hasil" rows="10" placeholder="Paste teks hasil penelitian dan kesimpulan..."></textarea></div>
+        </div>
+        <div class="field"><label class="lbl">Hipotesis Spesifik (opsional)</label><textarea id="k-hipotesis" rows="2" placeholder="cth. H1: Terdapat pengaruh signifikan variabel X terhadap Y..."></textarea></div>
+        <button class="btn btn-primary btn-full" onclick="cekKonsistensi()" id="kons-btn">🔍 Cek Konsistensi Sekarang</button>
+      </div>
+      <div id="kons-result" style="display:none">
+        <div class="card" style="margin-top:var(--sp-3)" id="kons-summary"></div>
+        <div class="issues-list" id="kons-issues"></div>
+      </div>
+    </div>
+
+    <!-- ═══ TAB: POLESAN ═══ -->
+    <div class="tab-panel" id="panel-polesan">
+      <div class="card">
+        <div class="section-title">✍️ Polesan Bahasa Akademik</div>
+        <p class="section-sub">Ubah teks informal atau bertele-tele menjadi bahasa akademik formal. Mendukung rendering rumus matematika via <strong>KaTeX</strong>.</p>
+        <label class="lbl" style="margin-bottom:.5rem">Gaya Target</label>
+        <div class="style-opts">
+          <button class="style-opt active" data-style="akademik" onclick="selPolOpt(this)">📜 Akademik Formal</button>
+          <button class="style-opt" data-style="jurnal" onclick="selPolOpt(this)">🔬 Standar Jurnal</button>
+          <button class="style-opt" data-style="abstrak" onclick="selPolOpt(this)">📄 Abstrak Ilmiah</button>
+          <button class="style-opt" data-style="simpel" onclick="selPolOpt(this)">✂️ Ringkas &amp; Padat</button>
+        </div>
+        <div class="field" style="margin-top:var(--sp-3)"><label class="lbl">Teks Asli</label><textarea id="pol-input" rows="8" placeholder="Tulis atau paste teks yang ingin dipoles.&#10;&#10;Untuk rumus matematika, gunakan LaTeX:&#10;  Inline: $E = mc^2$&#10;  Display: $$\int_0^\infty e^{-x}\,dx = 1$$"></textarea></div>
+        <div style="display:flex;gap:var(--sp-2);flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="polishText()" id="pol-btn">✨ Poles Sekarang</button>
+          <button class="btn btn-teal" onclick="renderMathPreview()" title="Render rumus LaTeX yang ada di teks">∑ Preview Rumus</button>
+        </div>
+        <div id="math-preview-wrap" style="display:none;margin-top:var(--sp-3)">
+          <label class="lbl">Preview Rumus (KaTeX)</label>
+          <div class="math-box" id="math-preview"></div>
+        </div>
+      </div>
+      <div class="polesan-result" id="polesan-result">
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--sp-2);margin-bottom:var(--sp-3)">
+            <span class="res-title">Hasil Polesan</span>
+            <div style="display:flex;gap:var(--sp-2)">
+              <button class="btn btn-teal btn-sm" onclick="renderMathInResult()">∑ Render Rumus</button>
+              <button class="btn btn-outline btn-sm" onclick="copyEl('pol-result-body')">⎘ Salin</button>
+            </div>
+          </div>
+          <div class="pol-res-box" id="pol-result-body"></div>
+          <div id="pol-changes" style="margin-top:var(--sp-3);font-size:var(--fs-xs);color:var(--text2);line-height:1.7;border-top:1px solid var(--border);padding-top:var(--sp-3)"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ TAB: SITASI ═══ -->
+    <div class="tab-panel" id="panel-sitasi">
+      <div class="cit-tabs">
+        <button class="cit-tab active" onclick="switchCitTab('generator',this)">🔗 Generator Sitasi</button>
+        <button class="cit-tab" onclick="switchCitTab('pustaka',this)">📚 Daftar Pustaka</button>
+      </div>
+      <div id="cit-generator">
+        <div class="card">
+          <div class="section-title">🔗 Generator Sitasi Otomatis</div>
+          <p class="section-sub">Isi informasi sumber → dapatkan format <strong>APA 7, MLA 9, &amp; IEEE</strong> secara otomatis. Simpan ke Daftar Pustaka &amp; export.</p>
+          <div class="row2">
+            <div class="field"><label class="lbl">Jenis Sumber</label>
+              <select id="cit-type"><option value="jurnal">Artikel Jurnal</option><option value="buku">Buku</option><option value="website">Website / Online</option><option value="prosiding">Prosiding Konferensi</option><option value="skripsi">Skripsi / Tesis</option><option value="laporan">Laporan / Dokumen</option></select>
+            </div>
+            <div class="field"><label class="lbl">Tahun Terbit</label><input id="cit-year" type="text" placeholder="cth. 2023"></div>
+          </div>
+          <div class="field"><label class="lbl">Judul</label><input id="cit-title" type="text" placeholder="Judul lengkap karya..."></div>
+          <div class="row2">
+            <div class="field"><label class="lbl">Penulis / Editor</label><input id="cit-author" type="text" placeholder="cth. Budi, A., &amp; Sari, R."></div>
+            <div class="field"><label class="lbl">Penerbit / Jurnal / Website</label><input id="cit-pub" type="text" placeholder="cth. Jurnal Manajemen Indonesia"></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label class="lbl">Volume / Edisi (opsional)</label><input id="cit-vol" type="text" placeholder="cth. Vol. 12, No. 3"></div>
+            <div class="field"><label class="lbl">Halaman / DOI / URL (opsional)</label><input id="cit-page" type="text" placeholder="cth. pp. 45-62 atau https://..."></div>
+          </div>
+          <div class="field"><label class="lbl">Kota Terbit (untuk buku)</label><input id="cit-city" type="text" placeholder="cth. Jakarta"></div>
+          <button class="btn btn-teal btn-full" onclick="genCitation()" id="cit-btn">🔗 Generate Sitasi Otomatis</button>
+        </div>
+        <div id="cit-result" style="display:none;margin-top:var(--sp-3)">
+          <div class="card">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--sp-2);margin-bottom:var(--sp-3)">
+              <span class="res-title">Format Sitasi</span>
+              <button class="btn btn-teal btn-sm" onclick="saveCurrentCitation()">💾 Simpan ke Daftar Pustaka</button>
+            </div>
+            <div class="cit-formats" id="cit-formats"></div>
+          </div>
+        </div>
+      </div>
+      <div id="cit-pustaka" style="display:none">
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--sp-2);margin-bottom:var(--sp-3)">
+            <div class="section-title" style="margin:0">📚 Daftar Pustaka Tersimpan</div>
+            <div style="display:flex;gap:var(--sp-2);flex-wrap:wrap">
+              <button class="btn btn-teal btn-sm" onclick="exportBiblio()">📥 Export .txt</button>
+              <button class="btn btn-danger btn-sm" onclick="clearBiblio()">🗑 Hapus Semua</button>
+            </div>
+          </div>
+          <div class="fmt-pills">
+            <button class="fmt-pill active" data-fmt="apa" onclick="setBibFmt(this,'apa')">APA 7</button>
+            <button class="fmt-pill" data-fmt="mla" onclick="setBibFmt(this,'mla')">MLA 9</button>
+            <button class="fmt-pill" data-fmt="ieee" onclick="setBibFmt(this,'ieee')">IEEE</button>
+          </div>
+          <div class="bib-wrap">
+            <table class="bib-table">
+              <thead><tr><th>#</th><th>Judul</th><th>Penulis</th><th>Tahun</th><th>Tipe</th><th>Aksi</th></tr></thead>
+              <tbody id="bib-tbody"></tbody>
+            </table>
+          </div>
+          <div id="bib-empty" class="empty-bib">📭 Belum ada referensi. Generate sitasi lalu klik "Simpan ke Daftar Pustaka".</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ TAB: PROGRES ═══ -->
+    <div class="tab-panel" id="panel-progres">
+      <div class="card">
+        <div class="section-title">📊 Thesis Roadmap &amp; Progress Tracker</div>
+        <p class="section-sub">Centang bab yang sudah selesai. Progress ring diperbarui otomatis.</p>
+        <div class="ring-wrap">
+          <svg style="width:clamp(140px,25vw,180px);height:clamp(140px,25vw,180px)" viewBox="0 0 160 160" class="ring-svg">
+            <circle cx="80" cy="80" r="66" fill="none" stroke="var(--border)" stroke-width="14"/>
+            <circle cx="80" cy="80" r="66" fill="none" stroke="var(--green3)" stroke-width="14"
+              stroke-dasharray="414.69" stroke-dashoffset="414.69" id="ring-circle" stroke-linecap="round"
+              style="transition:stroke-dashoffset .7s ease"/>
+            <text x="80" y="75" text-anchor="middle" font-family="'Crimson Pro',serif" font-size="30" font-weight="700" fill="#1b4332" id="ring-pct-text">0%</text>
+            <text x="80" y="94" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#5a574e">Selesai</text>
+          </svg>
+        </div>
+        <div class="roadmap" id="roadmap"></div>
+      </div>
+      <div class="card">
+        <div class="section-title" style="margin-bottom:var(--sp-2)">🎯 Target Kata Harian</div>
+        <p class="section-sub" style="margin-bottom:var(--sp-3)">Set target harian dan catat kata yang sudah ditulis hari ini.</p>
+        <div class="row2">
+          <div class="field"><label class="lbl">Target (kata/hari)</label><input type="number" id="daily-target" placeholder="cth. 500" min="50" max="10000"></div>
+          <div class="field"><label class="lbl">Sudah ditulis hari ini</label><input type="number" id="daily-current" placeholder="cth. 250" min="0"></div>
+        </div>
+        <button class="btn btn-primary" onclick="updateDailyTarget()">Set Target &amp; Simpan</button>
+        <div class="daily-bar-wrap" style="margin-top:var(--sp-3)"><div class="daily-bar" id="daily-bar" style="width:0%"></div></div>
+        <div class="daily-pct-txt" id="daily-pct">0 / 0 kata (0%)</div>
+      </div>
+      <div class="card">
+        <div class="section-title">📈 Sesi Analisis per Bab</div>
+        <div class="ses-counts" id="ses-counts"></div>
+      </div>
+    </div>
+
+    <!-- ═══ TAB: RIWAYAT ═══ -->
+    <div class="tab-panel" id="panel-riwayat">
+      <div class="history-header">
+        <div class="section-title" style="margin:0">📂 Riwayat Sesi</div>
+        <div style="display:flex;gap:var(--sp-2);flex-wrap:wrap">
+          <button class="btn btn-gold btn-sm" onclick="openSnapModal()">📸 Snapshot</button>
+          <button class="btn btn-danger btn-sm" onclick="clearAllHistory()" id="clear-hist-btn" style="display:none">🗑 Hapus Semua</button>
+        </div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-num" id="stat-total">0</div><div class="stat-lbl">Total Sesi</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-sidang">0</div><div class="stat-lbl">Sidang</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-analisis">0</div><div class="stat-lbl">Analisis</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-grade" style="color:var(--gold)">—</div><div class="stat-lbl">Nilai Sidang</div></div>
+      </div>
+      <div class="export-all-bar" id="export-all-bar" style="display:none">
+        <p>Export seluruh riwayat ke laporan PDF profesional.</p>
+        <div style="display:flex;gap:var(--sp-2);flex-wrap:wrap">
+          <button class="btn btn-pdf btn-sm" onclick="exportFullReport()">📄 Export Semua</button>
+          <button class="btn btn-gold btn-sm" onclick="exportSidangOnly()">⚖️ Sidang Saja</button>
+        </div>
+      </div>
+      <div class="hist-filters">
+        <button class="hfilt active" data-f="semua" onclick="filterHist(this)">Semua</button>
+        <button class="hfilt" data-f="sidang" onclick="filterHist(this)">⚖️ Sidang</button>
+        <button class="hfilt" data-f="analisis" onclick="filterHist(this)">📖 Analisis</button>
+        <button class="hfilt" data-f="kerangka" onclick="filterHist(this)">📋 Kerangka</button>
+        <button class="hfilt" data-f="konsistensi" onclick="filterHist(this)">🔍 Konsistensi</button>
+        <button class="hfilt" data-f="polesan" onclick="filterHist(this)">✍️ Polesan</button>
+        <button class="hfilt" data-f="sitasi" onclick="filterHist(this)">📚 Sitasi</button>
+      </div>
+      <div class="hist-list" id="hist-list">
+        <div class="empty-hist"><div class="eicon">📭</div><p>Belum ada riwayat.<br>Mulai sesi pertama Anda!</p></div>
+      </div>
+    </div>
+
+<!-- ═══ TAB: PARAFRASA ═══ -->
+<div class="tab-panel" id="panel-parafrasa" style="display:none">
+  <div class="card">
+    <div class="section-title">🔄 AI Paraphraser &amp; Anti-Plagiarism Check</div>
+    <p class="section-sub">Parafrase teks akademik secara otomatis dalam 3 versi berbeda. Estimasi tingkat kesamaan (similarity) dengan teks asli ditampilkan secara visual.</p>
+    <div class="field"><label class="lbl">Teks Asli yang Ingin Diparafrase</label><textarea id="para-input" rows="8" placeholder="Paste kalimat atau paragraf dari sumber asli yang ingin diparafrase...&#10;&#10;cth: Penelitian ini bertujuan untuk mengetahui pengaruh media sosial terhadap perilaku konsumtif remaja di kota Surabaya."></textarea></div>
+    <div class="row2">
+      <div class="field"><label class="lbl">Konteks Bidang Ilmu</label><input id="para-konteks" type="text" placeholder="cth. Psikologi, Ekonomi, Teknik..."></div>
+      <div class="field"><label class="lbl">Gaya Parafrase</label>
+        <select id="para-style"><option value="akademik">Akademik Formal</option><option value="sederhana">Lebih Sederhana</option><option value="elaborasi">Diperluas/Elaborasi</option><option value="teknis">Teknis/Saintifik</option></select>
+      </div>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="doParafrase()" id="para-btn">🔄 Parafrase Sekarang (3 Versi)</button>
+  </div>
+  <div id="para-result" style="display:none">
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--sp-2);margin-bottom:var(--sp-3)">
+        <span class="res-title">Hasil Parafrase</span>
+        <div id="sim-badge" style="font-size:var(--fs-xs);font-weight:600;padding:3px 12px;border-radius:20px;background:var(--surface2)"></div>
+      </div>
+      <div style="margin-bottom:var(--sp-2)">
+        <label class="lbl" style="margin-bottom:.5rem">Estimasi Similarity Score</label>
+        <div class="sim-bar-wrap"><div class="sim-bar-fill" id="sim-bar" style="width:0%"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:var(--fs-xs);color:var(--text3);margin-top:3px"><span>Aman ✅</span><span>Perlu Revisi ⚠</span><span>Berisiko 🔴</span></div>
+      </div>
+      <div class="para-ver-tabs">
+        <button class="para-ver-btn active" onclick="showParaVer(1,this)">Versi 1</button>
+        <button class="para-ver-btn" onclick="showParaVer(2,this)">Versi 2</button>
+        <button class="para-ver-btn" onclick="showParaVer(3,this)">Versi 3</button>
+      </div>
+      <div class="para-cols">
+        <div>
+          <label class="lbl" style="color:var(--red)">📄 Teks Asli</label>
+          <div class="orig-box" id="para-orig-display"></div>
+        </div>
+        <div>
+          <label class="lbl" style="color:var(--green-text)">✅ Hasil Parafrase</label>
+          <div class="para-box" id="para-ver-display"></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:var(--sp-2);margin-top:var(--sp-3);flex-wrap:wrap">
+        <button class="btn btn-outline btn-sm" onclick="copyEl('para-ver-display')">⎘ Salin Versi Ini</button>
+        <button class="btn btn-primary btn-sm" onclick="doParafrase()">🔄 Parafrase Ulang</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TAB: REFERENSI ═══ -->
+<div class="tab-panel" id="panel-referensi" style="display:none">
+  <div class="card">
+    <div class="section-title">🔎 Smart Reference Finder</div>
+    <p class="section-sub">Cari jurnal &amp; artikel ilmiah relevan dari <strong>Semantic Scholar</strong> (gratis, 200 juta+ paper). Simpan langsung ke Daftar Pustaka.</p>
+    <div class="field"><label class="lbl">Kata Kunci / Rumusan Masalah</label><input id="ref-query" type="text" placeholder="cth. transformational leadership employee performance, atau pengaruh media sosial remaja..." onkeydown="if(event.key==='Enter')cariReferensi()"></div>
+    <div class="row2">
+      <div class="field"><label class="lbl">Filter Tahun (dari)</label><input id="ref-from" type="number" placeholder="cth. 2019" min="1990" max="2025"></div>
+      <div class="field"><label class="lbl">Jumlah Hasil</label>
+        <select id="ref-limit"><option value="5">5 hasil</option><option value="10" selected>10 hasil</option><option value="15">15 hasil</option></select>
+      </div>
+    </div>
+    <div style="display:flex;gap:var(--sp-2);flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="cariReferensi()" id="ref-btn">🔎 Cari Referensi</button>
+      <button class="btn btn-teal btn-sm" onclick="refAiSuggest()" id="ref-ai-btn">🤖 Sarankan Kata Kunci AI</button>
+    </div>
+  </div>
+  <div id="ref-results" style="margin-top:var(--sp-3)"></div>
+</div>
+
+<!-- ═══ TAB: STATISTIK ═══ -->
+<div class="tab-panel" id="panel-statistik" style="display:none">
+  <div class="card">
+    <div class="section-title">📐 Panduan Statistik Otomatis</div>
+    <p class="section-sub">Jawab 5 pertanyaan singkat → AI merekomendasikan uji statistik yang paling tepat untuk penelitian Anda, lengkap dengan penjelasan &amp; cara interpretasi.</p>
+    <div class="stat-wizard" id="stat-wizard">
+      <!-- Q1 -->
+      <div class="wiz-q active" id="wq1">
+        <div class="wiz-q-header"><div class="wiz-q-num">1</div><div class="wiz-q-text">Apa skala pengukuran data utama Anda?</div></div>
+        <div class="wiz-opts">
+          <button class="wiz-opt" onclick="wizAnswer(1,'Nominal','Kategori tanpa urutan')" title="Misal: jenis kelamin, agama">📌 Nominal<br><small>Kategori tanpa urutan</small></button>
+          <button class="wiz-opt" onclick="wizAnswer(1,'Ordinal','Kategori dengan urutan')" title="Misal: skala Likert 1-5">📊 Ordinal<br><small>Skala Likert / Peringkat</small></button>
+          <button class="wiz-opt" onclick="wizAnswer(1,'Interval/Rasio','Data numerik kontinu')" title="Misal: usia, skor, pendapatan">📈 Interval/Rasio<br><small>Data numerik kontinu</small></button>
+        </div>
+      </div>
+      <!-- Q2 -->
+      <div class="wiz-q" id="wq2">
+        <div class="wiz-q-header"><div class="wiz-q-num">2</div><div class="wiz-q-text">Apa tujuan utama analisis Anda?</div></div>
+        <div class="wiz-opts">
+          <button class="wiz-opt" onclick="wizAnswer(2,'Perbedaan','Membandingkan dua atau lebih kelompok')">⚖️ Perbedaan<br><small>Bandingkan kelompok</small></button>
+          <button class="wiz-opt" onclick="wizAnswer(2,'Hubungan','Mencari korelasi antar variabel')">🔗 Hubungan<br><small>Korelasi antar variabel</small></button>
+          <button class="wiz-opt" onclick="wizAnswer(2,'Pengaruh','Menguji pengaruh X terhadap Y')">➡️ Pengaruh<br><small>Variabel X → Y</small></button>
+          <button class="wiz-opt" onclick="wizAnswer(2,'Deskripsi','Mendeskripsikan karakteristik data')">📋 Deskripsi<br><small>Karakteristik data</small></button>
+        </div>
+      </div>
+      <!-- Q3 -->
+      <div class="wiz-q" id="wq3">
+        <div class="wiz-q-header"><div class="wiz-q-num">3</div><div class="wiz-q-text">Berapa jumlah variabel independen (bebas)?</div></div>
+        <div class="wiz-opts">
+          <button class="wiz-opt" onclick="wizAnswer(3,'1 variabel bebas','Satu prediktor')">1️⃣ Satu<br><small>1 variabel bebas</small></button>
+          <button class="wiz-opt" onclick="wizAnswer(3,'2-3 variabel bebas','Beberapa prediktor')">2️⃣ Dua atau Tiga<br><small>2–3 variabel bebas</small></button>
+          <button class="wiz-opt" onclick="wizAnswer(3,'4+ variabel bebas','Banyak prediktor')">🔢 Lebih dari Tiga<br><small>4+ variabel bebas</small></button>
+        </div>
+      </div>
+      <!-- Q4 -->
+      <div class="wiz-q" id="wq4">
+        <div class="wiz-q-header"><div class="wiz-q-num">4</div><div class="wiz-q-text">Apakah distribusi data Anda normal (atau mendekati normal)?</div></div>
+        <div class="wiz-opts">
+          <button class="wiz-opt" onclick="wizAnswer(4,'Ya, distribusi normal','Sudah diuji normalitas')">✅ Ya<br><small>Sudah diuji / n &gt; 30</small></button>
+          <button class="wiz-opt" onclick="wizAnswer(4,'Tidak normal / non-parametrik','Data tidak normal')">❌ Tidak Normal<br><small>Non-parametrik</small></button>
+          <button class="wiz-opt" onclick="wizAnswer(4,'Belum diketahui','Perlu diuji dahulu')">❓ Belum Tahu<br><small>Perlu uji normalitas</small></button>
+        </div>
+      </div>
+      <!-- Q5 -->
+      <div class="wiz-q" id="wq5">
+        <div class="wiz-q-header"><div class="wiz-q-num">5</div><div class="wiz-q-text">Berapa jumlah kelompok yang dibandingkan?</div></div>
+        <div class="wiz-opts">
+          <button class="wiz-opt" onclick="wizAnswer(5,'1 kelompok','Satu sampel')">1️⃣ Satu<br><small>One sample</small></button>
+          <button class="wiz-opt" onclick="wizAnswer(5,'2 kelompok','Dua sampel')">2️⃣ Dua<br><small>Dua kelompok/sampel</small></button>
+          <button class="wiz-opt" onclick="wizAnswer(5,'3+ kelompok','Tiga kelompok atau lebih')">🔢 Tiga+<br><small>Multi kelompok</small></button>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:var(--sp-2);margin-top:var(--sp-3);flex-wrap:wrap">
+      <button class="btn btn-primary btn-full" id="stat-rec-btn" onclick="getStatRec()" style="display:none">📐 Lihat Rekomendasi Statistik</button>
+      <button class="btn btn-outline btn-sm" onclick="resetWizard()">↺ Mulai Ulang</button>
+    </div>
+    <div class="stat-rec-box" id="stat-rec-box">
+      <div class="stat-rec-name" id="stat-rec-name"></div>
+      <div class="stat-rec-body" id="stat-rec-body"></div>
+      <div style="display:flex;gap:var(--sp-2);margin-top:var(--sp-3);flex-wrap:wrap">
+        <button class="btn btn-outline btn-sm" onclick="copyEl('stat-rec-body')">⎘ Salin</button>
+        <button class="btn btn-outline btn-sm" onclick="resetWizard()">↺ Coba Lagi</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TAB: KOLABORASI ═══ -->
+<div class="tab-panel" id="panel-kolaborasi" style="display:none">
+  <div class="card">
+    <div class="section-title">🤝 Mode Kolaborasi &amp; Review</div>
+    <p class="section-sub">Generate laporan HTML mandiri yang bisa dibagikan ke dosen pembimbing. Laporan berisi ringkasan progres, semua hasil analisis, dan catatan revisi Anda.</p>
+    <div class="collab-info">💡 Laporan digenerate sebagai file <strong>.html</strong> yang bisa dibuka di browser mana pun — tanpa perlu koneksi internet. Dosen cukup klik dua kali file-nya.</div>
+    <div class="row2">
+      <div class="field"><label class="lbl">Nama Mahasiswa</label><input id="collab-nama" type="text" placeholder="Nama lengkap..."></div>
+      <div class="field"><label class="lbl">NIM</label><input id="collab-nim" type="text" placeholder="cth. 20210123456"></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label class="lbl">Judul Skripsi (untuk laporan)</label><input id="collab-judul" type="text" placeholder="Judul lengkap..."></div>
+      <div class="field"><label class="lbl">Nama Dosen Pembimbing</label><input id="collab-dosen" type="text" placeholder="cth. Dr. Anita Surya, M.Si."></div>
+    </div>
+    <div class="field"><label class="lbl">Catatan / Pertanyaan untuk Dosen (opsional)</label><textarea id="collab-notes" rows="4" placeholder="Tulis catatan, pertanyaan revisi, atau hal yang ingin didiskusikan dengan dosen pembimbing..."></textarea></div>
+    <div style="display:flex;gap:var(--sp-2);flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="previewReport()">👁 Preview Laporan</button>
+      <button class="btn btn-gold" onclick="downloadReport()">📥 Download Laporan (.html)</button>
+    </div>
+  </div>
+  <div class="report-preview" id="report-preview">
+    <div class="rp-head">
+      <span class="rp-head-title">Preview Laporan untuk Dosen</span>
+      <button class="btn btn-gold btn-sm" onclick="downloadReport()">📥 Download</button>
+    </div>
+    <div class="rp-body" id="rp-body"></div>
+  </div>
+</div>
+  <footer class="app-footer">Thesis Co-Pilot Ultra-Smart Edition v5.0 · Groq AI · KaTeX · Web Speech API · Semantic Scholar · Pomodoro · Export PDF</footer>
+  </main>
+</div>
+
+<!-- ── MODAL: API KEY ── -->
+<div class="modal-overlay" id="api-modal" onclick="if(event.target===this)closeApiModal()">
+  <div class="modal-box" style="max-width:420px">
+    <div class="modal-head"><h3>⚙️ Pengaturan API Key</h3><button class="modal-close" onclick="closeApiModal()">×</button></div>
+    <div class="modal-body prose">
+      <p style="font-size:var(--fs-sm);color:var(--text2);line-height:1.65;margin-bottom:var(--sp-3)">Masukkan Groq API Key. Key disimpan hanya di browser (localStorage) dan tidak dikirim ke mana pun selain server Groq.</p>
+      <div class="field"><label class="lbl">Groq API Key</label><input id="modal-api-key" type="password" placeholder="gsk_..." autocomplete="off" style="font-family:monospace;font-size:11.5px;letter-spacing:.03em"></div>
+      <div id="modal-api-status" style="font-size:var(--fs-xs);min-height:14px;margin-bottom:var(--sp-3)"></div>
+      <div style="background:var(--gold-light);border:1px solid #e8c97a;border-radius:var(--radius-sm);padding:var(--sp-2) var(--sp-3);font-size:var(--fs-xs);color:#7a5c1e;line-height:1.6;margin-bottom:var(--sp-3)">
+        💡 Daftar gratis di <strong><a href="https://console.groq.com" target="_blank" style="color:var(--gold)">console.groq.com</a></strong> → API Keys → Create API Key.
+      </div>
+      <button class="btn btn-primary btn-full" onclick="saveApiKeyFromModal()">💾 Simpan API Key</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL: DETAIL SESI ── -->
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="modal-title">Detail Sesi</h3>
+      <div class="modal-head-actions">
+        <button class="btn btn-pdf btn-sm" onclick="exportModalSession()">📄 PDF</button>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- ── MODAL: SNAPSHOT ── -->
+<div class="modal-overlay" id="snap-modal" onclick="if(event.target===this)closeSnapModal()">
+  <div class="modal-box" style="max-width:480px">
+    <div class="modal-head"><h3>📸 Snapshot Riwayat</h3><button class="modal-close" onclick="closeSnapModal()">×</button></div>
+    <div class="modal-body prose">
+      <p style="font-size:var(--fs-sm);color:var(--text2);margin-bottom:var(--sp-3)">Simpan "foto" seluruh riwayat sesi saat ini sebagai backup versi. Maks 5 snapshot.</p>
+      <div class="field"><label class="lbl">Nama Snapshot</label><input id="snap-name" type="text" placeholder="cth. Draft Bab 3 Selesai, Sebelum Revisi..."></div>
+      <button class="btn btn-gold btn-full" onclick="doSaveSnapshot()">📸 Ambil Snapshot Sekarang</button>
+      <div style="margin-top:var(--sp-4)">
+        <div style="font-size:var(--fs-sm);font-weight:600;margin-bottom:var(--sp-2)">Snapshot Tersimpan</div>
+        <div id="snap-list" style="display:flex;flex-direction:column;gap:var(--sp-2)"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── WELLNESS: POMODORO FLOATING WIDGET ── -->
+<div class="pomo-float" id="pomo-float">
+  <div class="pomo-panel" id="pomo-panel">
+    <div class="pomo-ph">
+      <h4>🍅 Pomodoro Timer</h4>
+      <button class="pomo-x" onclick="togglePomoPanel()">×</button>
+    </div>
+    <div class="pomo-content">
+      <div class="pomo-ring-container">
+        <svg width="120" height="120" viewBox="0 0 120 120" class="pomo-ring-svg">
+          <circle cx="60" cy="60" r="50" fill="none" stroke="var(--border)" stroke-width="10"/>
+          <circle cx="60" cy="60" r="50" fill="none" stroke="var(--green3)" stroke-width="10"
+            stroke-dasharray="314.16" stroke-dashoffset="0" id="pomo-ring"
+            stroke-linecap="round" style="transition:stroke-dashoffset .5s linear,stroke .3s"/>
+        </svg>
+        <div class="pomo-time-text" id="pomo-time">25:00</div>
+      </div>
+      <div class="pomo-mode-label" id="pomo-mode-label">🎯 Sesi Fokus — Mulai belajar!</div>
+      <div class="pomo-cycle" id="pomo-cycle">Siklus: 0 / 4</div>
+      <div class="pomo-ctrls">
+        <button class="btn btn-primary btn-sm" id="pomo-start-btn" onclick="startPomo()">▶ Mulai</button>
+        <button class="btn btn-outline btn-sm" onclick="pausePomo()" id="pomo-pause-btn" style="display:none">⏸ Jeda</button>
+        <button class="btn btn-outline btn-sm" onclick="resetPomo()">↺</button>
+      </div>
+      <div class="quote-card" id="pomo-quote" onclick="nextQuote()" title="Klik untuk kutipan baru">
+        Klik untuk melihat kutipan motivasi harian...
+      </div>
+    </div>
+  </div>
+  <button class="pomo-fab" id="pomo-fab" onclick="togglePomoPanel()" title="Timer Pomodoro &amp; Motivasi">🍅</button>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ════════════════════════════════════════════
+   AUTH
+════════════════════════════════════════════ */
+/* ── Safe localStorage wrapper (handle sandbox/private mode) ── */
+function lsAvailable(){
+  try{const t='__tcp_test__';localStorage.setItem(t,'1');localStorage.removeItem(t);return true;}catch(e){return false;}
+}
+function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){console.warn('localStorage.setItem gagal:',e);}}
+function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function lsDel(k){try{localStorage.removeItem(k);}catch(e){}}
+let currentUser=null,authMode='masuk';
+function toggleAuthTab(m){
+  authMode=m;
+  ['masuk','daftar'].forEach(k=>document.getElementById('ltab-'+k).classList.toggle('active',k===m));
+  document.getElementById('field-nama').style.display=m==='daftar'?'block':'none';
+  document.getElementById('field-prodi').style.display=m==='daftar'?'block':'none';
+  document.getElementById('auth-btn').textContent=m==='masuk'?'Masuk →':'Daftar & Masuk →';
+  ['auth-err','auth-ok'].forEach(id=>document.getElementById(id).style.display='none');
+}
+function hashPw(s){let h=0;for(let i=0;i<s.length;i++)h=(Math.imul(31,h)+s.charCodeAt(i))|0;return h.toString(36)}
+function doAuth(){
+  const un=document.getElementById('auth-user').value.trim().toLowerCase();
+  const pw=document.getElementById('auth-pass').value;
+  if(!un||!pw){showMsg('err','Username dan kata sandi wajib diisi.');return;}
+  if(un.length<3){showMsg('err','Username minimal 3 karakter.');return;}
+  if(pw.length<4){showMsg('err','Kata sandi minimal 4 karakter.');return;}
+  const users=JSON.parse(lsGet('tcp_users')||'{}');
+  if(authMode==='daftar'){
+    if(users[un]){showMsg('err','Username sudah dipakai.');return;}
+    const nama=document.getElementById('auth-nama').value.trim()||un;
+    const prodi=document.getElementById('auth-prodi').value.trim()||'';
+    users[un]={pw:hashPw(pw),nama,prodi,joined:new Date().toISOString()};
+    lsSet('tcp_users',JSON.stringify(users));
+    showMsg('ok','Akun berhasil dibuat! Silakan masuk.');
+    toggleAuthTab('masuk');document.getElementById('auth-pass').value='';
+  }else{
+    if(!users[un]){showMsg('err','Username tidak ditemukan.');return;}
+    if(users[un].pw!==hashPw(pw)){showMsg('err','Kata sandi salah.');return;}
+    /* ── FIX: simpan API key dari field login SEBELUM login ── */
+    const apiField=document.getElementById('login-api-key');
+    if(apiField&&apiField.value.trim())lsSet('tcp_api_key',apiField.value.trim());
+    loginUser(un,users[un]);
+  }
+}
+function showMsg(type,msg){
+  const id=type==='err'?'auth-err':'auth-ok';
+  const other=type==='err'?'auth-ok':'auth-err';
+  document.getElementById(other).style.display='none';
+  const el=document.getElementById(id);el.textContent=msg;el.style.display='block';
+}
+function loginUser(un,data){
+  currentUser={username:un,...data};
+  lsSet('tcp_session',JSON.stringify({username:un,ts:Date.now()}));
+  document.getElementById('login-page').style.display='none';
+  const app=document.getElementById('app');app.style.display='flex';app.style.flexDirection='column';
+  const init=data.nama.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+  document.getElementById('hdr-ava').textContent=init;
+  document.getElementById('hdr-name').textContent=data.nama.split(' ')[0];
+  refreshHistory();renderRoadmap();renderBiblio();loadProgData();
+  document.getElementById('pomo-float').style.display='block';
+  nextQuote();
+}
+function logout(){
+  if(!confirm('Yakin ingin keluar?'))return;
+  lsDel('tcp_session');currentUser=null;
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-page').style.display='flex';
+  document.getElementById('auth-user').value='';document.getElementById('auth-pass').value='';
+}
+window.addEventListener('load',()=>{
+  /* ── Cek apakah localStorage tersedia ── */
+  if(!lsAvailable()){
+    const w=document.getElementById('ls-warning');
+    if(w)w.style.display='block';
+    console.warn('[TCP] localStorage tidak tersedia — data tidak akan tersimpan.');
+    return; /* tidak perlu lanjut restore jika storage tidak bisa dipakai */
+  }
+  /* ── Auto-login jika sesi masih valid (< 7 hari) ── */
+  const ses=JSON.parse(lsGet('tcp_session')||'null');
+  if(ses&&Date.now()-ses.ts<7*24*60*60*1000){
+    const users=JSON.parse(lsGet('tcp_users')||'{}');
+    if(users[ses.username])loginUser(ses.username,users[ses.username]);
+  }
+  /* ── Pulihkan API Key ke field login (TANPA hardcoded default) ── */
+  const saved=lsGet('tcp_api_key')||'';
+  const li=document.getElementById('login-api-key');
+  if(li&&saved){li.value=saved;saveApiKeyLive(saved);}
+});
+
+/* ════════════════════════════════════════════
+   HISTORY & SESSION
+════════════════════════════════════════════ */
+let histFilter='semua',lastSessionId=null;
+function histKey(){return 'tcp_hist_'+(currentUser?.username||'guest')}
+function getHistory(){return JSON.parse(lsGet(histKey())||'[]')}
+function saveSession(type,title,content,extra){
+  const hist=getHistory();
+  const id=Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+  hist.unshift({id,type,title,content,extra,date:new Date().toISOString()});
+  if(hist.length>100)hist.splice(100);
+  lsSet(histKey(),JSON.stringify(hist));
+  lastSessionId=id;refreshHistory();return id;
+}
+function deleteSession(id){
+  lsSet(histKey(),JSON.stringify(getHistory().filter(h=>h.id!==id)));
+  refreshHistory();toast('Sesi dihapus.');
+}
+function clearAllHistory(){
+  if(!confirm('Hapus semua riwayat?'))return;
+  lsDel(histKey());refreshHistory();toast('Riwayat dihapus.');
+}
+function filterHist(btn){
+  document.querySelectorAll('.hfilt').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');histFilter=btn.dataset.f;renderHistList();
+}
+function refreshHistory(){
+  const hist=getHistory(),sid=hist.filter(h=>h.type==='sidang');
+  document.getElementById('stat-total').textContent=hist.length;
+  document.getElementById('stat-sidang').textContent=sid.length;
+  document.getElementById('stat-analisis').textContent=hist.filter(h=>h.type==='analisis').length;
+  document.getElementById('stat-grade').textContent=sid[0]?.extra?.grade||'—';
+  document.getElementById('hist-badge').textContent=hist.length;
+  document.getElementById('clear-hist-btn').style.display=hist.length>0?'inline-flex':'none';
+  document.getElementById('export-all-bar').style.display=hist.length>0?'flex':'none';
+  renderHistList();updateSesCounts();
+}
+function renderHistList(){
+  const hist=getHistory().filter(h=>histFilter==='semua'||h.type===histFilter);
+  const list=document.getElementById('hist-list');
+  if(!hist.length){list.innerHTML='<div class="empty-hist"><div class="eicon">📭</div><p>Belum ada riwayat untuk kategori ini.</p></div>';return;}
+  const tIcon={sidang:'⚖️',analisis:'📖',kerangka:'📋',konsistensi:'🔍',polesan:'✍️',sitasi:'📚'};
+  const tLabel={sidang:'Sidang Virtual',analisis:'Analisis Bab',kerangka:'Kerangka',konsistensi:'Cek Konsistensi',polesan:'Polesan Bahasa',sitasi:'Sitasi'};
+  const tCls={sidang:'hist-icon-sidang',analisis:'hist-icon-analisis',kerangka:'hist-icon-kerangka',konsistensi:'hist-icon-konsistensi',polesan:'hist-icon-polesan',sitasi:'hist-icon-sitasi'};
+  list.innerHTML=hist.map(h=>{
+    const d=new Date(h.date);
+    const ds=d.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'})+' '+d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+    const grade=h.type==='sidang'&&h.extra?.grade?`<div class="hist-grade grade-${h.extra.grade}">${h.extra.grade}</div>`:'';
+    return`<div class="hist-item"><div class="hist-icon ${tCls[h.type]||''}">${tIcon[h.type]||'📄'}</div>
+      <div class="hist-body" onclick="viewSession('${h.id}')" style="cursor:pointer">
+        <div class="hist-title">${escHtml(h.title||'Tanpa judul')}</div>
+        <div class="hist-meta"><span>${tLabel[h.type]||h.type}</span><span>🕐 ${ds}</span></div>
+      </div>
+      <div class="hist-actions">${grade}
+        <div class="item-btns">
+          <button class="btn btn-pdf btn-sm" onclick="exportSessionById('${h.id}')">📄</button>
+          <button class="btn btn-outline btn-sm" onclick="viewSession('${h.id}')">👁</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteSession('${h.id}')">🗑</button>
+        </div>
+      </div></div>`;
+  }).join('');
+}
+let modalSessionId=null;
+function viewSession(id){
+  const h=getHistory().find(s=>s.id===id);if(!h)return;
+  modalSessionId=id;
+  document.getElementById('modal-title').textContent=h.title||'Detail Sesi';
+  document.getElementById('modal-body').textContent=h.content||'(Tidak ada konten)';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open');modalSessionId=null;}
+function exportModalSession(){if(modalSessionId)exportSessionById(modalSessionId);}
+
+/* ════════════════════════════════════════════
+   API KEY
+════════════════════════════════════════════ */
+function getApiKey(){return lsGet('tcp_api_key')||'';}
+function saveApiKeyLive(val){
+  const c=val.trim();lsSet('tcp_api_key',c);
+  const st=document.getElementById('api-key-status');if(!st)return;
+  if(!c){st.textContent='';return;}
+  st.innerHTML=c.startsWith('gsk_')?'<span style="color:#1b4332">✓ Format valid — tersimpan otomatis</span>':'<span style="color:#c0392b">⚠ Harus diawali gsk_</span>';
+}
+function openApiModal(){document.getElementById('modal-api-key').value=getApiKey();document.getElementById('modal-api-status').textContent='';document.getElementById('api-modal').classList.add('open');}
+function closeApiModal(){document.getElementById('api-modal').classList.remove('open');}
+function saveApiKeyFromModal(){
+  const v=document.getElementById('modal-api-key').value.trim();
+  if(!v){document.getElementById('modal-api-status').innerHTML='<span style="color:#c0392b">API Key tidak boleh kosong.</span>';return;}
+  lsSet('tcp_api_key',v);
+  document.getElementById('modal-api-status').innerHTML='<span style="color:#1b4332">✓ Tersimpan!</span>';
+  setTimeout(()=>closeApiModal(),900);toast('✅ API Key tersimpan!');
+}
+function checkApiKey(){const k=getApiKey();if(!k){openApiModal();toast('⚠ Masukkan Groq API Key dulu!');return false;}return true;}
+
+/* ════════════════════════════════════════════
+   GROQ API CALL
+════════════════════════════════════════════ */
+const GROQ_URL='https://api.groq.com/openai/v1/chat/completions';
+const GROQ_MODEL='llama-3.3-70b-versatile';
+async function callGroq(sys,msg,hist,maxTok=1500){
+  if(!checkApiKey())throw new Error('No key');
+  const messages=[{role:'system',content:sys},...(hist||[]),{role:'user',content:msg}];
+  const res=await fetch(GROQ_URL,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+getApiKey()},body:JSON.stringify({model:GROQ_MODEL,max_tokens:maxTok,messages})});
+  const data=await res.json();
+  if(data.error)throw new Error(data.error.message||'Groq API Error');
+  return data.choices?.[0]?.message?.content||'Terjadi kesalahan API.';
+}
+
+/* ════════════════════════════════════════════
+   SIDANG — 3 EXAMINER PERSONALITIES
+════════════════════════════════════════════ */
+let chatHistory=[],qCount=0,waitReply=false,recActive=false,recognition=null,sidangTitle='';
+let examinerProfile='killer';
+
+const PROF_PROFILES={
+  killer:{
+    name:'Prof. Dr. H. Suharto Wibisono, M.Si.',role:'Ketua Dewan Penguji · Penguji Killer',emoji:'👨‍💼',
+    sys:`Anda adalah Prof. Dr. H. Suharto Wibisono, M.Si. — Penguji senior, sangat kritis, perfeksionis, tak mudah puas.
+KEPRIBADIAN: Formal, tegas, sesekali Jawa: "Lajeng pripun?", "Niki logikanya mboten nyambung".
+FORMAT TIAP RESPONS:
+[KOMENTAR PENGUJI]
+(komentar kritis 2-3 kalimat)
+[PERTANYAAN KE-N]
+(satu pertanyaan menusuk)
+Rotasi: Originalitas→Teori→Metodologi→Validitas→Interpretasi→Implikasi→Final.
+Setelah 7 pertanyaan:
+[EVALUASI AKHIR]
+PREDIKSI NILAI: [A/B/C/D]
+ALASAN: (2 paragraf)
+POIN KUAT: (2-3 poin)
+KELEMAHAN: (2-3 poin)
+SKOR: Penguasaan X/10, Argumentasi X/10, Kepercayaan Diri X/10`
+  },
+  metodologi:{
+    name:'Dr. Kartika Rahayu Puspita, M.Sc.',role:'Spesialis Metodologi & Statistik Penelitian',emoji:'👩‍🔬',
+    sys:`Anda adalah Dr. Kartika Rahayu Puspita, M.Sc. — Ahli metodologi, sangat teliti pada aspek teknis.
+KEPRIBADIAN: Akademis, presisi, pertanyaan fokus pada validitas internal/eksternal, reliabilitas, sampling, uji asumsi, interpretasi statistik, generalisasi.
+FORMAT TIAP RESPONS:
+[CATATAN METODOLOGI]
+(komentar teknis 2-3 kalimat)
+[PERTANYAAN METODOLOGI KE-N]
+(satu pertanyaan teknis spesifik)
+Setelah 7 pertanyaan:
+[EVALUASI AKHIR]
+PREDIKSI NILAI: [A/B/C/D]
+ALASAN METODOLOGIS: (2 paragraf)
+KEKUATAN METODOLOGI: (2-3 poin)
+CELAH METODOLOGI: (2-3 poin)
+SKOR: Desain Penelitian X/10, Analisis Data X/10, Validitas X/10`
+  },
+  penyelamat:{
+    name:'Dr. Bima Arjuna Santosa, M.Pd.',role:'Pembimbing & Penguji Konstruktif',emoji:'🧑‍🏫',
+    sys:`Anda adalah Dr. Bima Arjuna Santosa, M.Pd. — Penguji bijaksana, konstruktif, supportif tapi tetap akademis.
+KEPRIBADIAN: Hangat, memotivasi, setiap kritik diikuti saran membangun.
+FORMAT TIAP RESPONS:
+[APRESIASI & MASUKAN]
+(1 kalimat positif + 1-2 kalimat masukan)
+[PERTANYAAN KE-N]
+(satu pertanyaan menggali pemahaman)
+Setelah 7 pertanyaan:
+[EVALUASI AKHIR]
+PREDIKSI NILAI: [A/B/C/D]
+CATATAN PEMBIMBING: (2 paragraf konstruktif)
+PRESTASI: (2-3 hal baik)
+SARAN PERBAIKAN: (2-3 poin konkret)
+SKOR: Pemahaman X/10, Argumentasi X/10, Kesiapan Sidang X/10`
+  }
+};
+
+function selectExaminer(el){
+  document.querySelectorAll('.exam-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');examinerProfile=el.dataset.profile;
+}
+function startSidang(){
+  const judul=document.getElementById('s-judul').value.trim();
+  if(!judul){toast('Judul skripsi wajib diisi!');return;}
+  if(!checkApiKey())return;
+  sidangTitle=judul;chatHistory=[];qCount=0;waitReply=false;
+  const prof=PROF_PROFILES[examinerProfile];
+  document.getElementById('prof-ava').textContent=prof.emoji;
+  document.getElementById('prof-name').textContent=prof.name;
+  document.getElementById('prof-role').textContent=prof.role;
+  document.getElementById('setup-area').style.display='none';
+  document.getElementById('sidang-area').style.display='block';
+  document.getElementById('score-area').style.display='none';
+  document.getElementById('chat-msgs').innerHTML='';
+  updateProg();
+  const ctx=`SKRIPSI: ${judul}\nProdi: ${document.getElementById('s-jurusan').value||'-'}\nMetode: ${document.getElementById('s-metode').value||'-'}\nHasil: ${document.getElementById('s-hasil').value||'-'}\nSampel: ${document.getElementById('s-sampel').value||'-'}\nVariabel: ${document.getElementById('s-var').value||'-'}`;
+  askFirstQ(ctx);
+}
+async function askFirstQ(ctx){
+  setInState(false);showDots();
+  try{
+    const prof=PROF_PROFILES[examinerProfile];
+    const r=await callGroq(prof.sys,`Mulai sidang. Berikan pembukaan formal dan pertanyaan pertama (Pertanyaan ke-1).\n\n${ctx}`,null);
+    removeDots();addMsg('ai',r);qCount=1;updateProg();chatHistory.push({role:'assistant',content:r});
+  }catch(e){removeDots();addMsg('ai','[Koneksi bermasalah. Periksa API key dan coba lagi.]');}
+  setInState(true);
+}
+async function sendChat(){
+  const inp=document.getElementById('chat-in');
+  const txt=inp.value.trim();
+  if(!txt||waitReply)return;
+  inp.value='';adjH(inp);addMsg('user',txt);
+  chatHistory.push({role:'user',content:txt});
+  waitReply=true;setInState(false);showDots();
+  try{
+    const prof=PROF_PROFILES[examinerProfile];
+    const nextN=Math.min(qCount+1,7);
+    const sysWithN=prof.sys.replace(/KE-N/g,`KE-${nextN}`);
+    const r=await callGroq(sysWithN,'',chatHistory);
+    removeDots();addMsg('ai',r);chatHistory.push({role:'assistant',content:r});
+    if(/\[EVALUASI AKHIR\]/.test(r)){showScore(r);}
+    else{qCount=Math.min(qCount+1,7);updateProg();}
+  }catch(e){removeDots();addMsg('ai','[Koneksi bermasalah. Coba lagi.]');}
+  waitReply=false;setInState(true);
+}
+function chatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}}
+function addMsg(role,text){
+  const box=document.getElementById('chat-msgs');
+  const d=document.createElement('div');d.className=`msg msg-${role}`;
+  const prof=PROF_PROFILES[examinerProfile];
+  d.innerHTML=role==='ai'
+    ?`<div class="msg-ava">${prof.emoji}</div><div class="bubble bubble-ai">${escHtml(text)}</div>`
+    :`<div class="msg-ava">👤</div><div class="bubble bubble-user">${escHtml(text)}</div>`;
+  box.appendChild(d);box.scrollTop=box.scrollHeight;
+}
+function showDots(){
+  const box=document.getElementById('chat-msgs');
+  const prof=PROF_PROFILES[examinerProfile];
+  const d=document.createElement('div');d.className='msg msg-ai';d.id='typing';
+  d.innerHTML=`<div class="msg-ava">${prof.emoji}</div><div class="bubble bubble-ai"><div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>`;
+  box.appendChild(d);box.scrollTop=box.scrollHeight;
+}
+function removeDots(){const t=document.getElementById('typing');if(t)t.remove();}
+function setInState(on){['chat-in','send-btn','mic-btn'].forEach(id=>{const el=document.getElementById(id);if(el)el.disabled=!on;});}
+function updateProg(){
+  const p=Math.min((qCount/7)*100,100);
+  document.getElementById('prog').style.width=p+'%';
+  document.getElementById('q-pill').textContent=qCount+' / 7';
+  document.getElementById('qcount-badge').textContent=qCount+'/7';
+}
+function adjH(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
+document.getElementById('chat-in').addEventListener('input',function(){adjH(this);});
+function showScore(text){
+  document.getElementById('sidang-area').style.display='none';
+  document.getElementById('score-area').style.display='block';
+  let g='B';
+  if(/NILAI:\s*A/.test(text))g='A';else if(/NILAI:\s*B/.test(text))g='B';
+  else if(/NILAI:\s*C/.test(text))g='C';else if(/NILAI:\s*D/.test(text))g='D';
+  const lbl={A:'Sangat Memuaskan — Selamat!',B:'Baik — Ada ruang perbaikan.',C:'Cukup — Perlu latihan intensif.',D:'Kurang — Revisi mayor diperlukan.'};
+  document.getElementById('grade-display').textContent=g;
+  document.getElementById('grade-display').className='grade-display grade-'+g;
+  document.getElementById('grade-label').textContent=lbl[g]||'';
+  document.getElementById('score-body').textContent=text.replace(/\[EVALUASI AKHIR\]/g,'').trim();
+  const full=chatHistory.map(m=>m.role.toUpperCase()+': '+m.content).join('\n\n---\n\n');
+  saveSession('sidang','Sidang: '+sidangTitle,text+'\n\n=== TRANSKRIP ===\n\n'+full,{grade:g,judul:sidangTitle,examiner:examinerProfile});
+  toast('✅ Hasil disimpan! Klik PDF untuk unduh laporan.');
+}
+function resetSidang(){
+  chatHistory=[];qCount=0;waitReply=false;
+  document.getElementById('score-area').style.display='none';
+  document.getElementById('sidang-area').style.display='none';
+  document.getElementById('chat-msgs').innerHTML='';
+  updateProg();document.getElementById('setup-area').style.display='block';
+}
+
+/* Web Speech API — auto-kirim setelah selesai bicara */
+function toggleMic(){
+  if(!('SpeechRecognition'in window)&&!('webkitSpeechRecognition'in window)){document.getElementById('mic-status').textContent='Gunakan Chrome untuk fitur suara.';return;}
+  if(recActive){recognition&&recognition.stop();return;}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  recognition=new SR();recognition.lang='id-ID';recognition.interimResults=true;recognition.continuous=false;
+  recognition.onstart=()=>{recActive=true;document.getElementById('mic-btn').classList.add('rec');document.getElementById('mic-status').textContent='● Merekam — bicara sekarang...';};
+  recognition.onresult=(e)=>{let t='';for(let i=e.resultIndex;i<e.results.length;i++)t+=e.results[i][0].transcript;const inp=document.getElementById('chat-in');inp.value=t;adjH(inp);};
+  recognition.onerror=(e)=>{document.getElementById('mic-status').textContent='Error: '+e.error;recActive=false;document.getElementById('mic-btn').classList.remove('rec');};
+  recognition.onend=()=>{
+    recActive=false;document.getElementById('mic-btn').classList.remove('rec');document.getElementById('mic-status').textContent='';
+    if(document.getElementById('chat-in').value.trim())sendChat();
+  };
+  recognition.start();
+}
+
+/* ════════════════════════════════════════════
+   ANALISIS BAB — CHAPTER-AWARE PROMPTING
+════════════════════════════════════════════ */
+let selChapNum=1;
+const BAB_LBL={1:'Pendahuluan',2:'Tinjauan Pustaka',3:'Metodologi',4:'Hasil & Pembahasan',5:'Kesimpulan'};
+const CHAP_CTX_TXT={
+  1:'Ketajaman identifikasi masalah, kejelasan rumusan & tujuan, relevansi latar belakang, signifikansi penelitian.',
+  2:'Keluasan & kedalaman teori, kemutakhiran referensi, relevansi literatur, kejelasan kerangka konseptual & hipotesis.',
+  3:'Kesesuaian desain penelitian, validitas & reliabilitas instrumen, teknik sampling, prosedur analisis data.',
+  4:'Keselarasan analisis dengan tujuan, ketepatan interpretasi, kedalaman pembahasan, dukungan teori pada temuan.',
+  5:'Kelengkapan simpulan vs tujuan, implikasi teoritis & praktis, ketepatan saran, limitasi penelitian.'
+};
+const BAB_SYS={
+  1:`Reviewer akademik senior. Analisis BAB 1 PENDAHULUAN skripsi Indonesia.
+Fokus: (1) Ketajaman gap penelitian & identifikasi masalah, (2) Kejelasan rumusan & tujuan, (3) Relevansi latar belakang, (4) Signifikansi kontribusi.
+FORMAT:\nRINGKASAN SINGKAT\n(3 kalimat)\nKEKUATAN\n• ...\nKELEMAHAN & REKOMENDASI\n• [kelemahan] → Rekomendasi: [saran]\nPERTANYAAN SIDANG\n1. ...\n2. ...\n3. ...\nSKOR KOMPONEN:\n- Identifikasi Masalah: X/10\n- Rumusan & Tujuan: X/10\n- Latar Belakang: X/10\n- Signifikansi: X/10`,
+  2:`Reviewer akademik senior. Analisis BAB 2 TINJAUAN PUSTAKA skripsi Indonesia.
+Fokus: (1) Keluasan & kedalaman teori, (2) Kemutakhiran & relevansi referensi, (3) Kejelasan kerangka konseptual, (4) Ketepatan hipotesis.
+FORMAT:\nRINGKASAN SINGKAT\n(3 kalimat)\nKEKUATAN\n• ...\nKELEMAHAN & REKOMENDASI\n• [kelemahan] → Rekomendasi: [saran]\nPERTANYAAN SIDANG\n1. ...\n2. ...\n3. ...\nSKOR KOMPONEN:\n- Kualitas Teori: X/10\n- Kemutakhiran Referensi: X/10\n- Kerangka Konseptual: X/10\n- Hipotesis: X/10`,
+  3:`Reviewer metodologi. Analisis BAB 3 METODOLOGI skripsi Indonesia.
+Fokus: (1) Kesesuaian desain penelitian, (2) Validitas & reliabilitas instrumen, (3) Teknik sampling & representativitas, (4) Prosedur analisis data.
+FORMAT:\nRINGKASAN SINGKAT\n(3 kalimat)\nKEKUATAN\n• ...\nKELEMAHAN & REKOMENDASI\n• [kelemahan] → Rekomendasi: [saran]\nPERTANYAAN SIDANG\n1. ...\n2. ...\n3. ...\nSKOR KOMPONEN:\n- Desain Penelitian: X/10\n- Instrumen: X/10\n- Sampling: X/10\n- Analisis Data: X/10`,
+  4:`Reviewer akademik senior. Analisis BAB 4 HASIL & PEMBAHASAN skripsi Indonesia.
+Fokus: (1) Keselarasan analisis dengan tujuan, (2) Ketepatan interpretasi statistik/data, (3) Kedalaman pembahasan, (4) Dukungan teori.
+FORMAT:\nRINGKASAN SINGKAT\n(3 kalimat)\nKEKUATAN\n• ...\nKELEMAHAN & REKOMENDASI\n• [kelemahan] → Rekomendasi: [saran]\nPERTANYAAN SIDANG\n1. ...\n2. ...\n3. ...\nSKOR KOMPONEN:\n- Analisis Data: X/10\n- Interpretasi: X/10\n- Pembahasan: X/10\n- Dukungan Teori: X/10`,
+  5:`Reviewer akademik senior. Analisis BAB 5 KESIMPULAN & SARAN skripsi Indonesia.
+Fokus: (1) Kelengkapan simpulan vs tujuan penelitian, (2) Implikasi teoritis & praktis, (3) Ketepatan saran, (4) Limitasi penelitian.
+FORMAT:\nRINGKASAN SINGKAT\n(3 kalimat)\nKEKUATAN\n• ...\nKELEMAHAN & REKOMENDASI\n• [kelemahan] → Rekomendasi: [saran]\nPERTANYAAN SIDANG\n1. ...\n2. ...\n3. ...\nSKOR KOMPONEN:\n- Kesesuaian Simpulan: X/10\n- Implikasi: X/10\n- Saran: X/10\n- Limitasi: X/10`
+};
+function selChap(btn){
+  document.querySelectorAll('.chap-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');selChapNum=parseInt(btn.dataset.chap);
+  document.getElementById('chap-ctx').textContent='💡 Konteks AI: '+CHAP_CTX_TXT[selChapNum];
+}
+function loadBabFile(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=(e)=>{document.getElementById('bab-text').value=e.target.result;toast('✅ File dimuat: '+file.name);};
+  reader.readAsText(file,'UTF-8');input.value='';
+}
+async function analisisbab(){
+  const teks=document.getElementById('bab-text').value.trim();
+  if(teks.length<80){toast('Teks terlalu pendek (min. 80 karakter)!');return;}
+  if(!checkApiKey())return;
+  const btn=document.getElementById('analis-btn');
+  btn.disabled=true;btn.innerHTML='<span class="spinner spinner-dark"></span> Menganalisis...';
+  try{
+    const jur=document.getElementById('bab-jur').value||'umum';
+    const fokus=document.getElementById('bab-fokus').value;
+    const result=await callGroq(BAB_SYS[selChapNum],`Bidang ilmu: ${jur}. Fokus tambahan: ${fokus}.\n\nTEKS BAB ${selChapNum} (${BAB_LBL[selChapNum]}):\n${teks}`,null);
+    const resBox=document.getElementById('analisis-result');
+    resBox.style.display='block';
+    document.getElementById('res-title').textContent=`Analisis Bab ${selChapNum} — ${BAB_LBL[selChapNum]}`;
+    document.getElementById('analisis-body').textContent=result;
+    const scores={};const sp=/- (.+?):\s*(\d+)\/10/g;let m;
+    while((m=sp.exec(result))!==null)scores[m[1].trim()]=parseInt(m[2]);
+    document.getElementById('score-chips').innerHTML=Object.entries(scores).map(([k,v])=>`<div class="score-chip"><div class="chip-num" style="color:${v>=8?'#1b4332':v>=6?'#1a5276':'#c0392b'}">${v}</div><div class="chip-lbl">${k.split(' ')[0]}</div></div>`).join('');
+    resBox.scrollIntoView({behavior:'smooth',block:'start'});
+    saveSession('analisis',`Bab ${selChapNum}: ${teks.substring(0,50)}…`,result,{bab:selChapNum,scores});
+    toast('✅ Analisis disimpan!');
+  }catch(e){toast('Gagal menganalisis. Periksa API key.');}
+  btn.disabled=false;btn.innerHTML='🔬 Analisis Sekarang';
+}
+
+/* ════════════════════════════════════════════
+   KERANGKA
+════════════════════════════════════════════ */
+const KER_SYS=`Pakar metodologi penelitian Indonesia. Buat kerangka skripsi sangat detail.
+Tiap bab: ═══ BAB [N]: [JUDUL] ═══ / TUJUAN BAB / SUB-BAB: N.N [Judul] / Isi: ... / Tips: ... / ESTIMASI HALAMAN: X–Y
+Buat Bab 1–5. Di akhir: REKOMENDASI TEORI UTAMA + POTENSI PERTANYAAN SIDANG TERKUAT.`;
+async function genKerangka(){
+  const topik=document.getElementById('k-topik').value.trim();
+  if(!topik){toast('Topik wajib diisi!');return;}
+  if(!checkApiKey())return;
+  const btn=document.getElementById('ker-btn');
+  btn.disabled=true;btn.innerHTML='<span class="spinner spinner-dark"></span> Membuat kerangka...';
+  try{
+    const result=await callGroq(KER_SYS,`Topik: ${topik}\nProdi: ${document.getElementById('k-jur').value||'umum'}\nMetode: ${document.getElementById('k-met').value}\nVariabel: ${document.getElementById('k-var').value||'-'}\nLokus: ${document.getElementById('k-lokus').value||'-'}\nTambahan: ${document.getElementById('k-ket').value||'-'}`,null,2000);
+    const c=document.getElementById('outline-result');
+    c.innerHTML=`<div class="outline-block"><div class="outline-hd">📋 ${escHtml(topik.substring(0,55))}… <div style="display:flex;gap:6px"><button class="btn btn-pdf btn-sm" style="padding:3px 9px;font-size:10px" onclick="exportLastSession()">📄 PDF</button><button class="copy-btn" onclick="copyEl('outline-inner')">⎘ Salin</button></div></div><div class="outline-body" id="outline-inner">${escHtml(result)}</div></div>`;
+    c.scrollIntoView({behavior:'smooth',block:'start'});
+    saveSession('kerangka','Kerangka: '+topik.substring(0,60),result,{metode:document.getElementById('k-met').value});
+    toast('✅ Kerangka disimpan!');
+  }catch(e){toast('Gagal generate kerangka.');}
+  btn.disabled=false;btn.innerHTML='✨ Generate Kerangka Skripsi';
+}
+
+/* ════════════════════════════════════════════
+   KONSISTENSI
+════════════════════════════════════════════ */
+const KONS_SYS=`Metodolog ahli deteksi inkonsistensi antar bab. Cek apakah hipotesis/metodologi sejalan dengan hasil & kesimpulan.
+FORMAT:
+STATUS_OVERALL: [KONSISTEN/PERLU_PERHATIAN/INKONSISTEN]
+SKOR_KONSISTENSI: [0-100]
+JUMLAH_MASALAH: [angka]
+RINGKASAN:
+(2-3 kalimat)
+MASALAH DITEMUKAN:
+ITEM|LEVEL|DESKRIPSI|SARAN
+(satu baris per masalah; Level: KRITIS/PERINGATAN/INFO)
+POIN POSITIF:
+• (hal yang sudah konsisten)`;
+async function cekKonsistensi(){
+  const met=document.getElementById('k-metode').value.trim();
+  const hasil=document.getElementById('k-hasil').value.trim();
+  if(!met||!hasil){toast('Isi kedua kolom!');return;}
+  if(!checkApiKey())return;
+  const btn=document.getElementById('kons-btn');
+  btn.disabled=true;btn.innerHTML='<span class="spinner spinner-dark"></span> Menganalisis...';
+  try{
+    const result=await callGroq(KONS_SYS,`METODOLOGI/HIPOTESIS:\n${met}\n\nHASIL & KESIMPULAN:\n${hasil}\n\nHIPOTESIS SPESIFIK:\n${document.getElementById('k-hipotesis').value||'Tidak disebutkan'}`,null);
+    renderKons(result);
+    document.getElementById('kons-result').scrollIntoView({behavior:'smooth',block:'start'});
+    saveSession('konsistensi','Cek Konsistensi — '+new Date().toLocaleDateString('id-ID'),result,{});
+    toast('✅ Hasil disimpan!');
+  }catch(e){toast('Gagal menganalisis.');}
+  btn.disabled=false;btn.innerHTML='🔍 Cek Konsistensi Sekarang';
+}
+function renderKons(text){
+  const st=text.match(/STATUS_OVERALL:\s*(\w+)/)?.[1]||'PERLU_PERHATIAN';
+  const sc=parseInt(text.match(/SKOR_KONSISTENSI:\s*(\d+)/)?.[1]||'50');
+  const nm=parseInt(text.match(/JUMLAH_MASALAH:\s*(\d+)/)?.[1]||'0');
+  const ring=text.match(/RINGKASAN:\s*([\s\S]*?)(?=MASALAH DITEMUKAN:|POIN POSITIF:|$)/)?.[1]?.trim()||'';
+  const pos=text.match(/POIN POSITIF:\s*([\s\S]*?)$/)?.[1]?.trim()||'';
+  const badgeCls={KONSISTEN:'badge-ok',PERLU_PERHATIAN:'badge-warn',INKONSISTEN:'badge-err'};
+  document.getElementById('kons-summary').innerHTML=`<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:var(--sp-3)">
+    <span class="result-badge ${badgeCls[st]||'badge-warn'}">${st==='KONSISTEN'?'✅':'⚠️'} ${st.replace(/_/g,' ')}</span>
+    <span style="font-family:'Crimson Pro',serif;font-size:var(--fs-xl);font-weight:700;color:${sc>=70?'var(--green)':sc>=40?'var(--gold)':'var(--red)'}"><strong>${sc}</strong><span style="font-size:.75em;color:var(--text2)">/100</span></span>
+    <span style="font-size:var(--fs-xs);color:var(--text2)">${nm} masalah ditemukan</span>
+  </div>
+  <p style="font-size:var(--fs-sm);line-height:1.7;color:var(--text2)">${escHtml(ring)}</p>
+  ${pos?`<div style="margin-top:var(--sp-3);padding:var(--sp-2) var(--sp-3);background:var(--green-light);border-radius:var(--radius-sm);font-size:var(--fs-xs);line-height:1.7;color:var(--green-text)">✅ ${escHtml(pos)}</div>`:''}`;
+  document.getElementById('kons-result').style.display='block';
+  const issues=[];const rx=/(.+?)\|(.+?)\|(.+?)\|(.+)/g;let m;
+  const ms=text.match(/MASALAH DITEMUKAN:\s*([\s\S]*?)(?=POIN POSITIF:|$)/)?.[1]||'';
+  while((m=rx.exec(ms))!==null)issues.push({item:m[1].trim(),level:m[2].trim(),desc:m[3].trim(),saran:m[4].trim()});
+  const cls={KRITIS:'issue-critical',PERINGATAN:'issue-warn',INFO:'issue-ok'};
+  document.getElementById('kons-issues').innerHTML=issues.map(i=>`<div class="issue-item ${cls[i.level]||'issue-warn'}">
+    <div style="flex-shrink:0">${i.level==='KRITIS'?'🔴':i.level==='PERINGATAN'?'🟡':'🟢'}</div>
+    <div><strong>${escHtml(i.item)}</strong>: ${escHtml(i.desc)}<br><small style="color:var(--text2)">💡 ${escHtml(i.saran)}</small></div>
+  </div>`).join('');
+}
+
+/* ════════════════════════════════════════════
+   POLESAN BAHASA + KATEX
+════════════════════════════════════════════ */
+let polStyle='akademik';
+const POL_SYS={
+  akademik:`Editor akademik profesional Indonesia. Ubah teks menjadi bahasa akademik formal (ejaan baku, kalimat pasif, hindari kata informal seperti: "jadi","tapi","biar","bikin","terus","karena itu"). Pertahankan makna asli.
+FORMAT RESPONS:
+HASIL POLESAN:
+[teks yang sudah dipoles lengkap]
+PERUBAHAN UTAMA:
+• [perubahan 1]
+• [perubahan 2]`,
+  jurnal:`Editor jurnal ilmiah internasional. Ubah ke gaya jurnal bereputasi (ringkas, passive voice, terminologi teknis, hindari pengulangan).
+FORMAT RESPONS:
+HASIL POLESAN:
+[teks versi jurnal]
+PERUBAHAN UTAMA:
+• [perubahan]`,
+  abstrak:`Spesialis abstrak skripsi/tesis Indonesia. Susun ulang sebagai abstrak ilmiah standar: latar belakang, tujuan, metode, hasil, simpulan — dalam 1 paragraf padat.
+FORMAT RESPONS:
+HASIL POLESAN:
+[abstrak 1 paragraf]
+PERUBAHAN UTAMA:
+• [perubahan]`,
+  simpel:`Editor ringkasan ilmiah. Potong bagian bertele-tele, pertahankan gagasan inti, kalimat pendek dan padat, tanpa kehilangan substansi.
+FORMAT RESPONS:
+HASIL POLESAN:
+[teks yang sudah dipadatkan]
+PERUBAHAN UTAMA:
+• [perubahan]`
+};
+function selPolOpt(btn){
+  document.querySelectorAll('.style-opt').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');polStyle=btn.dataset.style;
+}
+async function polishText(){
+  const txt=document.getElementById('pol-input').value.trim();
+  if(txt.length<20){toast('Teks terlalu pendek!');return;}
+  if(!checkApiKey())return;
+  const btn=document.getElementById('pol-btn');
+  btn.disabled=true;btn.innerHTML='<span class="spinner spinner-dark"></span> Memoles...';
+  try{
+    const result=await callGroq(POL_SYS[polStyle],`Poles teks berikut:\n\n${txt}`,null);
+    const resBody=result.match(/HASIL POLESAN:\s*([\s\S]*?)(?=PERUBAHAN UTAMA:|$)/)?.[1]?.trim()||result;
+    const changes=result.match(/PERUBAHAN UTAMA:\s*([\s\S]*?)$/)?.[1]?.trim()||'';
+    document.getElementById('pol-result-body').textContent=resBody;
+    document.getElementById('pol-changes').innerHTML=changes?`<strong>Perubahan Utama:</strong><br>${escHtml(changes).replace(/\n/g,'<br>')}` :'';
+    document.getElementById('polesan-result').style.display='block';
+    document.getElementById('polesan-result').scrollIntoView({behavior:'smooth',block:'start'});
+    saveSession('polesan','Polesan: '+txt.substring(0,50)+'…',result,{style:polStyle});
+    toast('✅ Teks dipoles dan disimpan!');
+  }catch(e){toast('Gagal memoles teks.');}
+  btn.disabled=false;btn.innerHTML='✨ Poles Sekarang';
+}
+function renderMathPreview(){
+  const txt=document.getElementById('pol-input').value;
+  const wrap=document.getElementById('math-preview-wrap');
+  const prev=document.getElementById('math-preview');
+  prev.textContent=txt;wrap.style.display='block';
+  tryRenderMath('math-preview');
+}
+function renderMathInResult(){tryRenderMath('pol-result-body');}
+function tryRenderMath(elId){
+  const el=document.getElementById(elId);if(!el)return;
+  if(window._katexReady&&window.renderMathInElement){
+    try{
+      renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false},{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}],throwOnError:false});
+      toast('✅ Rumus berhasil dirender!');
+    }catch(err){toast('Gagal render rumus: '+err.message);}
+  }else{setTimeout(()=>tryRenderMath(elId),600);}
+}
+
+/* ════════════════════════════════════════════
+   SITASI & BIBLIOGRAPHY
+════════════════════════════════════════════ */
+let currentCitation=null,bibFmt='apa';
+const CIT_SYS=`Ahli referensi akademik. Buat sitasi dari informasi yang diberikan.
+FORMAT OUTPUT (ikuti persis, jangan tambah penjelasan):
+APA 7:
+[sitasi APA edisi 7 lengkap]
+MLA 9:
+[sitasi MLA edisi 9 lengkap]
+IEEE:
+[sitasi IEEE lengkap]
+Jika info kurang, buat perkiraan terbaik berdasarkan konvensi format.`;
+async function genCitation(){
+  const title=document.getElementById('cit-title').value.trim();
+  if(!title){toast('Judul wajib diisi!');return;}
+  if(!checkApiKey())return;
+  const btn=document.getElementById('cit-btn');
+  btn.disabled=true;btn.innerHTML='<span class="spinner spinner-dark"></span> Membuat sitasi...';
+  try{
+    const info=`Jenis: ${document.getElementById('cit-type').value}\nJudul: ${title}\nPenulis: ${document.getElementById('cit-author').value||'Tidak diketahui'}\nTahun: ${document.getElementById('cit-year').value||'n.d.'}\nPenerbit/Jurnal: ${document.getElementById('cit-pub').value||'-'}\nVolume/Edisi: ${document.getElementById('cit-vol').value||'-'}\nHalaman/DOI/URL: ${document.getElementById('cit-page').value||'-'}\nKota: ${document.getElementById('cit-city').value||'-'}`;
+    const result=await callGroq(CIT_SYS,info,null);
+    const apa=result.match(/APA 7:\s*([\s\S]*?)(?=MLA 9:|$)/)?.[1]?.trim()||'';
+    const mla=result.match(/MLA 9:\s*([\s\S]*?)(?=IEEE:|$)/)?.[1]?.trim()||'';
+    const ieee=result.match(/IEEE:\s*([\s\S]*?)$/)?.[1]?.trim()||'';
+    currentCitation={title,author:document.getElementById('cit-author').value,year:document.getElementById('cit-year').value,type:document.getElementById('cit-type').value,apa,mla,ieee};
+    document.getElementById('cit-formats').innerHTML=
+      `<div class="cit-block"><div class="cit-block-label">APA 7</div><div class="cit-block-text" id="fmt-apa">${escHtml(apa)}</div></div>`+
+      `<div class="cit-block"><div class="cit-block-label">MLA 9</div><div class="cit-block-text" id="fmt-mla">${escHtml(mla)}</div></div>`+
+      `<div class="cit-block"><div class="cit-block-label">IEEE</div><div class="cit-block-text" id="fmt-ieee">${escHtml(ieee)}</div></div>`;
+    document.getElementById('cit-result').style.display='block';
+    document.getElementById('cit-result').scrollIntoView({behavior:'smooth',block:'start'});
+    saveSession('sitasi','Sitasi: '+title.substring(0,50),result,{type:document.getElementById('cit-type').value});
+    toast('✅ Sitasi berhasil dibuat!');
+  }catch(e){toast('Gagal generate sitasi.');}
+  btn.disabled=false;btn.innerHTML='🔗 Generate Sitasi Otomatis';
+}
+function saveCurrentCitation(){
+  if(!currentCitation){toast('Belum ada sitasi untuk disimpan!');return;}
+  const bib=getBiblio();
+  bib.push({...currentCitation,id:Date.now().toString(36),added:new Date().toISOString()});
+  saveBiblio(bib);renderBiblio();
+  toast('✅ Ditambahkan ke Daftar Pustaka!');
+}
+function bibKey(){return 'tcp_bib_'+(currentUser?.username||'guest');}
+function getBiblio(){return JSON.parse(lsGet(bibKey())||'[]');}
+function saveBiblio(items){lsSet(bibKey(),JSON.stringify(items));}
+function renderBiblio(){
+  const bib=getBiblio();
+  const tbody=document.getElementById('bib-tbody');
+  const empty=document.getElementById('bib-empty');
+  if(!tbody)return;
+  if(!bib.length){tbody.innerHTML='';if(empty)empty.style.display='block';return;}
+  if(empty)empty.style.display='none';
+  tbody.innerHTML=bib.map((b,i)=>`<tr>
+    <td style="color:var(--text3);font-weight:600">${i+1}</td>
+    <td>${escHtml(b.title||'-')}</td>
+    <td>${escHtml(b.author||'-')}</td>
+    <td>${escHtml(b.year||'-')}</td>
+    <td><span style="font-size:9px;background:var(--teal-light);color:var(--teal);padding:1px 6px;border-radius:10px">${escHtml(b.type||'-')}</span></td>
+    <td><button class="btn btn-danger btn-sm" onclick="deleteBiblio('${b.id}')">🗑</button></td>
+  </tr>`).join('');
+}
+function deleteBiblio(id){saveBiblio(getBiblio().filter(b=>b.id!==id));renderBiblio();toast('Referensi dihapus.');}
+function clearBiblio(){if(!confirm('Hapus semua referensi?'))return;saveBiblio([]);renderBiblio();toast('Daftar Pustaka dikosongkan.');}
+function setBibFmt(btn,fmt){
+  document.querySelectorAll('.fmt-pill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');bibFmt=fmt;
+}
+function exportBiblio(){
+  const bib=getBiblio();if(!bib.length){toast('Daftar Pustaka kosong!');return;}
+  let txt=`DAFTAR PUSTAKA\n${'═'.repeat(50)}\nFormat: ${bibFmt.toUpperCase()}\nDigenerate: ${new Date().toLocaleDateString('id-ID')}\n\n`;
+  bib.forEach((b,i)=>{
+    const cit=bibFmt==='apa'?b.apa:bibFmt==='mla'?b.mla:b.ieee;
+    txt+=`${i+1}. ${cit||b.title}\n\n`;
+  });
+  const blob=new Blob([txt],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`DaftarPustaka_${bibFmt.toUpperCase()}_${new Date().toISOString().slice(0,10)}.txt`;
+  a.click();toast('✅ Daftar Pustaka berhasil diunduh!');
+}
+function switchCitTab(tab,btn){
+  document.querySelectorAll('.cit-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('cit-generator').style.display=tab==='generator'?'block':'none';
+  document.getElementById('cit-pustaka').style.display=tab==='pustaka'?'block':'none';
+  if(tab==='pustaka')renderBiblio();
+}
+
+/* ════════════════════════════════════════════
+   PROGRES & ROADMAP
+════════════════════════════════════════════ */
+const CHAP_DETAILS=[
+  {num:1,title:'Bab 1 — Pendahuluan',sub:'Identifikasi Masalah & Tujuan Penelitian'},
+  {num:2,title:'Bab 2 — Tinjauan Pustaka',sub:'Landasan Teori & Kerangka Konseptual'},
+  {num:3,title:'Bab 3 — Metodologi',sub:'Desain, Instrumen & Teknik Analisis'},
+  {num:4,title:'Bab 4 — Hasil & Pembahasan',sub:'Temuan Data & Interpretasi'},
+  {num:5,title:'Bab 5 — Kesimpulan',sub:'Simpulan, Implikasi & Saran'}
+];
+function progKey(){return 'tcp_prog_'+(currentUser?.username||'guest');}
+function getProgData(){return JSON.parse(lsGet(progKey())||'{"chapters":{},"dailyTarget":500,"dailyCurrent":0}');}
+function saveProgData(d){lsSet(progKey(),JSON.stringify(d));}
+function renderRoadmap(){
+  const prog=getProgData();
+  const rm=document.getElementById('roadmap');if(!rm)return;
+  rm.innerHTML=CHAP_DETAILS.map(c=>`<div class="road-step ${prog.chapters[c.num]?'done':''}" id="road-${c.num}">
+    <div class="road-num">${prog.chapters[c.num]?'✓':c.num}</div>
+    <div class="road-info"><div class="road-title">${c.title}</div><div class="road-sub">${c.sub}</div></div>
+    <input type="checkbox" class="road-chk" ${prog.chapters[c.num]?'checked':''} onchange="updateRoad(${c.num},this.checked)" title="Tandai selesai">
+  </div>`).join('');
+  updateRing(prog);
+}
+function updateRoad(num,checked){
+  const prog=getProgData();
+  if(checked)prog.chapters[num]=true;else delete prog.chapters[num];
+  saveProgData(prog);renderRoadmap();
+  toast(checked?`✅ Bab ${num} ditandai selesai!`:`Bab ${num} dibuka kembali.`);
+}
+function updateRing(prog){
+  const done=Object.keys(prog.chapters).length;
+  const pct=Math.round((done/5)*100);
+  const c=document.getElementById('ring-circle');
+  const t=document.getElementById('ring-pct-text');
+  if(c){const circ=2*Math.PI*66;c.style.strokeDashoffset=circ*(1-done/5);}
+  if(t)t.textContent=pct+'%';
+}
+function loadProgData(){
+  const prog=getProgData();
+  const tEl=document.getElementById('daily-target');
+  const cEl=document.getElementById('daily-current');
+  if(tEl)tEl.value=prog.dailyTarget||500;
+  if(cEl)cEl.value=prog.dailyCurrent||0;
+  updateDailyBar(prog.dailyCurrent||0,prog.dailyTarget||500);
+}
+function updateDailyTarget(){
+  const target=parseInt(document.getElementById('daily-target').value)||500;
+  const current=parseInt(document.getElementById('daily-current').value)||0;
+  const prog=getProgData();prog.dailyTarget=target;prog.dailyCurrent=current;
+  saveProgData(prog);updateDailyBar(current,target);
+  toast(current>=target?'🎉 Target tercapai! Luar biasa!':'✅ Target disimpan!');
+}
+function updateDailyBar(cur,tgt){
+  const pct=tgt>0?Math.min(100,Math.round((cur/tgt)*100)):0;
+  const bar=document.getElementById('daily-bar');
+  const lbl=document.getElementById('daily-pct');
+  if(bar){bar.style.width=pct+'%';bar.style.background=pct>=100?'var(--green)':'var(--green3)';}
+  if(lbl)lbl.textContent=`${cur.toLocaleString()} / ${tgt.toLocaleString()} kata (${pct}%)`;
+}
+function updateSesCounts(){
+  const hist=getHistory();
+  const el=document.getElementById('ses-counts');if(!el)return;
+  el.innerHTML=CHAP_DETAILS.map(c=>{
+    const cnt=hist.filter(h=>h.type==='analisis'&&h.extra?.bab===c.num).length;
+    return`<div class="ses-cnt-card"><div class="ses-cnt-num">${cnt}</div><div class="ses-cnt-lbl">Bab ${c.num} dianalisis</div></div>`;
+  }).join('');
+}
+
+/* ════════════════════════════════════════════
+   SNAPSHOT / VERSIONING
+════════════════════════════════════════════ */
+function snapKey(){return 'tcp_snap_'+(currentUser?.username||'guest');}
+function getSnaps(){return JSON.parse(lsGet(snapKey())||'[]');}
+function saveSnaps(s){lsSet(snapKey(),JSON.stringify(s));}
+function openSnapModal(){renderSnapList();document.getElementById('snap-modal').classList.add('open');document.getElementById('snap-name').value='';}
+function closeSnapModal(){document.getElementById('snap-modal').classList.remove('open');}
+function doSaveSnapshot(){
+  const name=document.getElementById('snap-name').value.trim();
+  if(!name){toast('Beri nama snapshot!');return;}
+  const snaps=getSnaps();
+  if(snaps.length>=5){toast('Maks 5 snapshot. Hapus yang lama dulu.');return;}
+  snaps.unshift({name,created:new Date().toISOString(),hist:getHistory()});
+  saveSnaps(snaps);renderSnapList();
+  toast('📸 Snapshot "'+name+'" disimpan!');
+}
+function restoreSnap(idx){
+  const snaps=getSnaps();if(!snaps[idx])return;
+  if(!confirm('Pulihkan snapshot ini? Riwayat saat ini akan diganti.'))return;
+  lsSet(histKey(),JSON.stringify(snaps[idx].hist));
+  refreshHistory();closeSnapModal();toast('✅ Snapshot dipulihkan!');
+}
+function deleteSnap(idx){
+  const snaps=getSnaps();snaps.splice(idx,1);saveSnaps(snaps);renderSnapList();toast('Snapshot dihapus.');
+}
+function renderSnapList(){
+  const snaps=getSnaps();
+  const el=document.getElementById('snap-list');if(!el)return;
+  if(!snaps.length){el.innerHTML='<div style="font-size:var(--fs-xs);color:var(--text3);text-align:center;padding:var(--sp-3)">Belum ada snapshot.</div>';return;}
+  el.innerHTML=snaps.map((s,i)=>`<div class="snap-item">
+    <div><div class="snap-name">${escHtml(s.name)}</div><div class="snap-date">${new Date(s.created).toLocaleString('id-ID')} · ${s.hist.length} sesi</div></div>
+    <div style="display:flex;gap:var(--sp-1)">
+      <button class="btn btn-outline btn-sm" onclick="restoreSnap(${i})">↩ Pulihkan</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteSnap(${i})">🗑</button>
+    </div>
+  </div>`).join('');
+}
+
+/* ════════════════════════════════════════════
+   PDF EXPORT
+════════════════════════════════════════════ */
+function exportLastSession(){if(!lastSessionId){toast('Belum ada sesi terbaru.');return;}exportSessionById(lastSessionId);}
+function exportSessionById(id){
+  const h=getHistory().find(s=>s.id===id);
+  if(!h){toast('Sesi tidak ditemukan.');return;}
+  toast('⏳ Membuat PDF...');
+  try{
+    const {jsPDF}=window.jspdf;
+    const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    const PW=210,PH=297,ML=18,MR=18,MT=20,TW=PW-ML-MR;
+    const GREEN=[27,94,32],DARK=[30,28,24],GRAY=[90,87,78],LIGHT=[247,244,238];
+    // Cover
+    doc.setFillColor(...GREEN);doc.rect(0,0,PW,PH,'F');
+    doc.setFillColor(255,255,255);doc.rect(ML,PH-22,TW,0.8,'F');
+    doc.setFont('times','bold');doc.setFontSize(11);doc.setTextColor(168,213,186);
+    doc.text('THESIS CO-PILOT — ULTRA-SMART EDITION v4.0',PW/2,30,{align:'center'});
+    doc.setFontSize(9);doc.text('Powered by Groq AI · LLaMA 3.3',PW/2,37,{align:'center'});
+    doc.setFillColor(255,255,255);doc.rect(ML,45,TW,0.6,'F');
+    doc.setFont('times','bold');doc.setFontSize(18);doc.setTextColor(255,255,255);
+    const tlines=doc.splitTextToSize(h.title||'Laporan Sesi',TW);
+    doc.text(tlines,PW/2,62,{align:'center'});
+    doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(168,213,186);
+    const tLabel={sidang:'Sidang Virtual',analisis:'Analisis Bab',kerangka:'Kerangka Skripsi',konsistensi:'Cek Konsistensi',polesan:'Polesan Bahasa',sitasi:'Generator Sitasi'};
+    doc.text('Tipe: '+(tLabel[h.type]||h.type),PW/2,80,{align:'center'});
+    doc.text(new Date(h.date).toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'}),PW/2,88,{align:'center'});
+    doc.text(currentUser?.nama||'Mahasiswa',PW/2,95,{align:'center'});
+    if(h.type==='sidang'&&h.extra?.grade){
+      const gColors={A:[27,94,32],B:[26,82,118],C:[125,102,8],D:[192,57,43]};
+      const gc=gColors[h.extra.grade]||[90,87,78];
+      doc.setFillColor(...gc);doc.roundedRect(PW/2-18,105,36,22,3,3,'F');
+      doc.setFont('times','bold');doc.setFontSize(22);doc.setTextColor(255,255,255);
+      doc.text(h.extra.grade,PW/2,120,{align:'center'});
+      doc.setFontSize(8);doc.text('PREDIKSI NILAI',PW/2,125,{align:'center'});
+    }
+    // Content
+    doc.addPage();
+    doc.setFillColor(...LIGHT);doc.rect(0,0,PW,PH,'F');
+    let y=MT;
+    doc.setFont('times','bold');doc.setFontSize(13);doc.setTextColor(...GREEN);
+    const hlines=doc.splitTextToSize(h.title||'',TW);doc.text(hlines,ML,y);y+=hlines.length*6+4;
+    doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(...GRAY);
+    doc.text(`${tLabel[h.type]||h.type} · ${new Date(h.date).toLocaleString('id-ID')}`,ML,y);y+=6;
+    doc.setFillColor(...GRAY);doc.rect(ML,y,TW,0.4,'F');y+=5;
+    doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(...DARK);
+    const content=h.content||'';
+    const clines=doc.splitTextToSize(content,TW);
+    clines.forEach(line=>{
+      if(y>PH-18){doc.addPage();doc.setFillColor(...LIGHT);doc.rect(0,0,PW,PH,'F');y=MT;}
+      doc.text(line,ML,y);y+=5;
+    });
+    const fname=`TCP_${h.type}_${new Date(h.date).toISOString().slice(0,10)}.pdf`;
+    doc.save(fname);toast('✅ PDF berhasil diunduh: '+fname);
+  }catch(e){toast('Gagal membuat PDF: '+e.message);}
+}
+function exportFullReport(){
+  const hist=getHistory();if(!hist.length){toast('Tidak ada riwayat.');return;}
+  toast('⏳ Mengekspor sesi satu per satu...');
+  hist.slice(0,8).forEach((h,i)=>setTimeout(()=>exportSessionById(h.id),i*600));
+}
+function exportSidangOnly(){
+  const hist=getHistory().filter(h=>h.type==='sidang');
+  if(!hist.length){toast('Belum ada sesi sidang.');return;}
+  toast('⏳ Mengekspor laporan sidang...');
+  hist.slice(0,5).forEach((h,i)=>setTimeout(()=>exportSessionById(h.id),i*600));
+}
+
+/* ════════════════════════════════════════════
+   UTILS
+════════════════════════════════════════════ */
+function escHtml(t){return(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function copyEl(id){navigator.clipboard.writeText(document.getElementById(id)?.textContent||'').then(()=>toast('✅ Teks disalin ke clipboard!'));}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
+
+/* ════════════════════════════════════════════
+   SWITCH TAB — EXTENDED (all 8+5 tabs)
+════════════════════════════════════════════ */
+const _allTabs=['sidang','analisis','kerangka','konsistensi','polesan','sitasi','progres','riwayat','parafrasa','referensi','statistik','kolaborasi'];
+function switchTab(name){
+  _allTabs.forEach(n=>{
+    const p=document.getElementById('panel-'+n);
+    const b=document.getElementById('tab-'+n);
+    if(p)p.style.display='none';
+    if(p)p.classList.remove('active');
+    if(b)b.classList.remove('active');
+  });
+  const panel=document.getElementById('panel-'+name);
+  const btn=document.getElementById('tab-'+name);
+  if(panel){panel.style.display='block';panel.classList.add('active');}
+  if(btn)btn.classList.add('active');
+  if(name==='riwayat')refreshHistory();
+  if(name==='progres'){renderRoadmap();updateSesCounts();loadProgData();}
+  if(name==='sitasi')renderBiblio();
+  if(name==='statistik')initWizard();
+  if(name==='kolaborasi')prefillCollab();
+}
+
+/* ════════════════════════════════════════════
+   FEATURE 1: AI PARAPHRASER & ANTI-PLAGIARISM
+════════════════════════════════════════════ */
+let paraVersions=['','',''];
+const PARA_SYS=`Anda adalah ahli parafrase akademik Indonesia yang sangat andal.
+TUGAS: Parafrase teks yang diberikan dalam TIGA versi berbeda. Setiap versi menggunakan:
+- Kosakata berbeda (sinonim formal/akademik)
+- Struktur kalimat berbeda
+- Tetap mempertahankan makna dan fakta asli
+- Tetap formal dan akademik sesuai standar
+
+FORMAT OUTPUT (ikuti persis):
+VERSI 1:
+[parafrase versi pertama]
+VERSI 2:
+[parafrase versi kedua]
+VERSI 3:
+[parafrase versi ketiga]
+ESTIMASI_SIMILARITY: [angka 15-85]
+(angka = perkiraan % kemiripan dengan asli setelah diparafrase)`;
+
+async function doParafrase(){
+  const txt=document.getElementById('para-input').value.trim();
+  if(txt.length<20){toast('Teks terlalu pendek!');return;}
+  if(!checkApiKey())return;
+  const btn=document.getElementById('para-btn');
+  btn.disabled=true;btn.innerHTML='<span class="spinner spinner-dark"></span> Memparafrase...';
+  try{
+    const ktx=document.getElementById('para-konteks').value||'umum';
+    const sty=document.getElementById('para-style').value;
+    const styleMap={akademik:'bahasa akademik formal',sederhana:'lebih sederhana namun tetap formal',elaborasi:'lebih panjang dan elaboratif',teknis:'teknis dan saintifik'};
+    const result=await callGroq(PARA_SYS,`Bidang: ${ktx}. Gaya: ${styleMap[sty]}.\n\nTEKS ASLI:\n${txt}`,null);
+    paraVersions[0]=result.match(/VERSI 1:\s*([\s\S]*?)(?=VERSI 2:|$)/)?.[1]?.trim()||'';
+    paraVersions[1]=result.match(/VERSI 2:\s*([\s\S]*?)(?=VERSI 3:|$)/)?.[1]?.trim()||'';
+    paraVersions[2]=result.match(/VERSI 3:\s*([\s\S]*?)(?=ESTIMASI_SIMILARITY:|$)/)?.[1]?.trim()||'';
+    const simRaw=parseInt(result.match(/ESTIMASI_SIMILARITY:\s*(\d+)/)?.[1]||'35');
+    const sim=Math.max(10,Math.min(90,simRaw));
+    document.getElementById('para-orig-display').textContent=txt;
+    showParaVer(1,document.querySelector('.para-ver-btn'));
+    const bar=document.getElementById('sim-bar');
+    const badge=document.getElementById('sim-badge');
+    bar.style.width=sim+'%';
+    if(sim<=35){bar.className='sim-bar-fill sim-low';badge.style.background='var(--green-light)';badge.style.color='var(--green-text)';badge.textContent='✅ Aman ('+sim+'%)';}
+    else if(sim<=65){bar.className='sim-bar-fill sim-mid';badge.style.background='var(--gold-light)';badge.style.color='#7a5c1e';badge.textContent='⚠ Perlu Revisi ('+sim+'%)';}
+    else{bar.className='sim-bar-fill sim-high';badge.style.background='var(--red-light)';badge.style.color='var(--red)';badge.textContent='🔴 Berisiko ('+sim+'%)';}
+    document.getElementById('para-result').style.display='block';
+    document.getElementById('para-result').scrollIntoView({behavior:'smooth',block:'start'});
+    saveSession('polesan','Parafrase: '+txt.substring(0,50)+'…',result,{type:'parafrase',sim});
+    toast('✅ 3 versi parafrase siap!');
+  }catch(e){toast('Gagal memparafrase. Periksa API key.');}
+  btn.disabled=false;btn.innerHTML='🔄 Parafrase Sekarang (3 Versi)';
+}
+function showParaVer(n,el){
+  document.querySelectorAll('.para-ver-btn').forEach(b=>b.classList.remove('active'));
+  if(el)el.classList.add('active');
+  document.getElementById('para-ver-display').textContent=paraVersions[n-1]||'(Belum tersedia)';
+}
+
+/* ════════════════════════════════════════════
+   FEATURE 2: SMART REFERENCE FINDER
+════════════════════════════════════════════ */
+async function cariReferensi(){
+  const q=document.getElementById('ref-query').value.trim();
+  if(!q){toast('Masukkan kata kunci!');return;}
+  if(!checkApiKey())return;
+  const btn=document.getElementById('ref-btn');
+  const limit=parseInt(document.getElementById('ref-limit').value)||10;
+  const fromYear=document.getElementById('ref-from').value;
+  const el=document.getElementById('ref-results');
+  btn.disabled=true;btn.innerHTML='<span class="spinner spinner-dark"></span> Mencari...';
+  el.innerHTML='<p style="padding:var(--sp-3);color:var(--text2);font-size:var(--fs-sm)">⏳ Menghubungi Groq AI...</p>';
+  const failsafe=setTimeout(()=>{btn.disabled=false;btn.innerHTML='🔎 Cari Referensi';el.innerHTML='<div class="card"><p style="color:var(--red);font-size:var(--fs-sm)">⚠ Timeout: tidak ada respons dari AI dalam 30 detik. Periksa koneksi internet dan Groq API Key Anda.</p></div>';},30000);
+  try{
+    const sys=`Anda adalah asisten riset akademik. Balas HANYA dengan JSON array murni tanpa markdown. Format: [{"title":"...","authors":"...","year":"...","journal":"...","doi":"...","abstract":"..."}]`;
+    const msg=`Topik: ${q}${fromYear?'. Tahun mulai: '+fromYear:''}. Jumlah: ${Math.min(limit,8)} referensi jurnal akademik bereputasi yang relevan. Sertakan DOI jika ada.`;
+    const raw=await callGroq(sys,msg,null,2500);
+    clearTimeout(failsafe);
+    const clean=raw.replace(/```json|```/g,'').trim();
+    let papers;
+    try{papers=JSON.parse(clean);}catch(pe){
+      const m=clean.match(/\[[\s\S]*\]/);
+      papers=m?JSON.parse(m[0]):null;
+    }
+    if(!Array.isArray(papers)||!papers.length){el.innerHTML='<div class="empty-bib">📭 Tidak ada hasil. Coba kata kunci lain.</div>';btn.disabled=false;btn.innerHTML='🔎 Cari Referensi';return;}
+    el.innerHTML='<div style="background:var(--blue-light);border:1px solid #aed6f1;border-radius:var(--radius-sm);padding:var(--sp-2) var(--sp-3);font-size:var(--fs-xs);color:var(--blue);margin-bottom:var(--sp-3)">🤖 Referensi dari Groq AI. Verifikasi di <a href="https://scholar.google.com" target="_blank" style="color:var(--blue)">Google Scholar</a> sebelum digunakan resmi.</div>'
+      +papers.map((p,i)=>{
+        const doi=(p.doi||'').trim();
+        const link=doi?`https://doi.org/${doi}`:`https://scholar.google.com/scholar?q=${encodeURIComponent(p.title||'')}`;
+        const authors=p.authors||'—';
+        const abstract=(p.abstract||'Tidak ada abstrak.').substring(0,280)+'…';
+        return`<div class="ref-card">
+          <a class="ref-title-link" href="${link}" target="_blank" rel="noopener">${escHtml(p.title||'Tanpa Judul')}</a>
+          <div class="ref-meta"><span>👤 ${escHtml(authors)}</span><span>📅 ${p.year||'—'}</span><span>📰 ${escHtml(p.journal||'—')}</span>${doi?'<span class="ref-badge">DOI</span>':''}</div>
+          <div class="ref-abstract">${escHtml(abstract)}</div>
+          <div style="display:flex;gap:var(--sp-2);margin-top:var(--sp-2);flex-wrap:wrap">
+            <a href="${link}" target="_blank" rel="noopener" class="btn btn-outline btn-sm">🔗 Buka Artikel</a>
+            <button class="btn btn-gold btn-sm" onclick="saveRefToBiblio(${i},'${escHtml(p.title||'').replace(/'/g,"\\'")}','${escHtml(authors).replace(/'/g,"\\'")}','${p.year||''}','${escHtml(doi).replace(/'/g,"\\'")}')">💾 Simpan ke Pustaka</button>
+          </div>
+        </div>`;
+      }).join('');
+  }catch(e){clearTimeout(failsafe);el.innerHTML=`<div class="card"><p style="color:var(--red);font-size:var(--fs-sm)">⚠ Error: ${escHtml(e.message)}</p></div>`;}
+  btn.disabled=false;btn.innerHTML='🔎 Cari Referensi';
+}
+
+async function refAiSuggest(){
+  const q=document.getElementById('ref-query').value.trim();
+  if(!q){toast('Isi kolom kata kunci dahulu!');return;}
+  if(!checkApiKey())return;
+  const btn=document.getElementById('ref-ai-btn');
+  btn.disabled=true;btn.innerHTML='<span class="spinner spinner-dark"></span>';
+  try{
+    const r=await callGroq('Anda adalah asisten riset akademik. Berikan 3-5 kata kunci pencarian jurnal internasional (dalam Bahasa Inggris) yang paling relevan untuk topik berikut. Formatnya: satu baris per kata kunci, tanpa nomor.',q,null,400);
+    const suggestions=r.trim().split('\n').filter(s=>s.trim()).slice(0,5);
+    toast('💡 Saran: '+suggestions[0]);
+    document.getElementById('ref-query').value=suggestions[0]||q;
+  }catch(e){toast('Gagal mendapat saran.');}
+  btn.disabled=false;btn.innerHTML='🤖 Sarankan Kata Kunci AI';
+}
+
+function saveRefToBiblio(idx,title,author,year,doi){
+  const bib=getBiblio();
+  const apaFormatted=`${author} (${year||'n.d.'}). ${title}. ${doi?'https://doi.org/'+doi:'Semantic Scholar.'}`;
+  bib.push({id:Date.now().toString(36),title,author,year,type:'jurnal',apa:apaFormatted,mla:'',ieee:'',added:new Date().toISOString()});
+  saveBiblio(bib);
+  toast('✅ Referensi disimpan ke Daftar Pustaka!');
+}
+
+/* ════════════════════════════════════════════
+   FEATURE 3: STATISTICAL GUIDE WIZARD
+════════════════════════════════════════════ */
+const wizAnswers={};
+let wizStep=1;
+
+function initWizard(){wizStep=1;Object.keys(wizAnswers).forEach(k=>delete wizAnswers[k]);renderWiz();}
+function resetWizard(){initWizard();document.getElementById('stat-rec-box').style.display='none';document.getElementById('stat-rec-btn').style.display='none';}
+
+function renderWiz(){
+  for(let i=1;i<=5;i++){
+    const q=document.getElementById('wq'+i);
+    if(!q)continue;
+    q.classList.remove('active','answered');
+    if(wizAnswers[i]){q.classList.add('answered');}
+    else if(i===wizStep){q.classList.add('active');}
+    q.querySelectorAll('.wiz-opt').forEach(b=>{b.classList.remove('chosen');if(b.textContent.trim().startsWith(wizAnswers[i]?.split('—')[0]||'___'))b.classList.add('chosen');});
+  }
+  const allDone=Object.keys(wizAnswers).length>=5;
+  document.getElementById('stat-rec-btn').style.display=allDone?'flex':'none';
+}
+
+function wizAnswer(step,val,hint){
+  wizAnswers[step]=val;
+  wizStep=Math.min(step+1,5);
+  renderWiz();
+  if(step===5)setTimeout(()=>getStatRec(),300);
+}
+
+const STAT_SYS=`Anda adalah ahli statistik dan metodologi penelitian kuantitatif. Berdasarkan karakteristik data dan tujuan penelitian yang diberikan, rekomendasikan uji statistik yang paling tepat.
+
+FORMAT RESPONS:
+REKOMENDASI_UTAMA: [Nama Uji Statistik]
+ALTERNATIF: [Nama Uji Alternatif]
+
+PENJELASAN:
+[2-3 kalimat mengapa uji ini cocok]
+
+ASUMSI YANG HARUS DIPENUHI:
+• [asumsi 1]
+• [asumsi 2]
+• [dst]
+
+CARA INTERPRETASI:
+[panduan singkat membaca hasil output]
+
+TOOLS YANG BISA DIGUNAKAN:
+[SPSS / R / Excel / dll + perintah/menu yang digunakan]
+
+CONTOH HIPOTESIS YANG TEPAT:
+H0: [rumusan hipotesis nol]
+H1: [rumusan hipotesis alternatif]`;
+
+async function getStatRec(){
+  if(!checkApiKey())return;
+  const btn=document.getElementById('stat-rec-btn');
+  btn.disabled=true;btn.innerHTML='<span class="spinner spinner-dark"></span> Menganalisis...';
+  try{
+    const q=`Skala data: ${wizAnswers[1]||'?'}\nTujuan analisis: ${wizAnswers[2]||'?'}\nJumlah variabel bebas: ${wizAnswers[3]||'?'}\nDistribusi data: ${wizAnswers[4]||'?'}\nJumlah kelompok: ${wizAnswers[5]||'?'}`;
+    const result=await callGroq(STAT_SYS,q,null);
+    const recName=result.match(/REKOMENDASI_UTAMA:\s*(.+)/)?.[1]?.trim()||'Lihat penjelasan';
+    document.getElementById('stat-rec-name').textContent='📐 '+recName;
+    document.getElementById('stat-rec-body').textContent=result.replace(/REKOMENDASI_UTAMA:.+\n?/,'').trim();
+    document.getElementById('stat-rec-box').style.display='block';
+    document.getElementById('stat-rec-box').scrollIntoView({behavior:'smooth',block:'start'});
+    saveSession('analisis','Panduan Statistik: '+recName,result,{bab:3,type:'statistik'});
+    toast('✅ Rekomendasi statistik tersedia!');
+  }catch(e){toast('Gagal mendapatkan rekomendasi.');}
+  btn.disabled=false;btn.innerHTML='📐 Lihat Rekomendasi Statistik';
+}
+
+/* ════════════════════════════════════════════
+   FEATURE 4: WELLNESS — POMODORO TIMER
+════════════════════════════════════════════ */
+const POMO_WORK=25*60,POMO_SHORT=5*60,POMO_LONG=15*60;
+let pomoInterval=null,pomoRemaining=POMO_WORK,pomoIsWork=true,pomoCycles=0,pomoPaused=true,pomoPanelOpen=false;
+
+const QUOTES=[
+  '"Skripsi bukan akhir dunia, tapi awal dari dunia barumu." — Anonim',
+  '"Setiap paragraf yang kamu tulis hari ini adalah satu langkah menuju toga." — Anonim',
+  '"Bukan yang terpintar yang berhasil, tapi yang paling gigih." — Einstein',
+  '"Kesulitan hari ini adalah kemampuan hari esok." — Anonim',
+  '"Satu halaman sehari, 365 halaman setahun. Mulailah sekarang." — Anonim',
+  '"Penelitian yang baik bukan yang sempurna, tapi yang selesai." — Anonim',
+  '"Jadilah mahasiswa yang membuat dosen penguji manggut-manggut." — Anonim',
+  '"Istirahat bukan kelemahan — itu strategi." — Anonim',
+  '"Setiap metode ada batasnya, setiap penulis ada capainya. Kamu hampir di sana." — Anonim',
+  '"Kalau bisa stres karena skripsi, bisa juga lega karena menyelesaikannya." — Anonim',
+  '"Verifikasi data itu melelahkan, tapi hasilnya memuaskan." — Anonim',
+  '"Revisi bukan tanda kegagalan — itu tanda kamu semakin matang." — Anonim',
+];
+let quoteIdx=Math.floor(Math.random()*QUOTES.length);
+
+function togglePomoPanel(){
+  pomoPanelOpen=!pomoPanelOpen;
+  document.getElementById('pomo-panel').style.display=pomoPanelOpen?'block':'none';
+  if(pomoPanelOpen)nextQuote();
+}
+function nextQuote(){quoteIdx=(quoteIdx+1)%QUOTES.length;const q=document.getElementById('pomo-quote');if(q)q.textContent=QUOTES[quoteIdx];}
+
+function startPomo(){
+  if(!pomoPaused)return;
+  pomoPaused=false;
+  document.getElementById('pomo-start-btn').style.display='none';
+  document.getElementById('pomo-pause-btn').style.display='inline-flex';
+  const fab=document.getElementById('pomo-fab');
+  fab.classList.toggle('running',pomoIsWork);
+  fab.classList.toggle('break',!pomoIsWork);
+  pomoInterval=setInterval(()=>{
+    pomoRemaining--;
+    updatePomoUI();
+    if(pomoRemaining<=0){
+      clearInterval(pomoInterval);pomoInterval=null;pomoPaused=true;
+      document.getElementById('pomo-start-btn').style.display='inline-flex';
+      document.getElementById('pomo-pause-btn').style.display='none';
+      pomoFinish();
+    }
+  },1000);
+}
+function pausePomo(){
+  if(pomoPaused)return;
+  pomoPaused=true;clearInterval(pomoInterval);pomoInterval=null;
+  document.getElementById('pomo-start-btn').style.display='inline-flex';
+  document.getElementById('pomo-pause-btn').style.display='none';
+  document.getElementById('pomo-fab').className='pomo-fab';
+}
+function resetPomo(){
+  pausePomo();pomoIsWork=true;pomoRemaining=POMO_WORK;
+  document.getElementById('pomo-fab').className='pomo-fab';
+  updatePomoUI();
+  document.getElementById('pomo-mode-label').textContent='🎯 Sesi Fokus — Mulai belajar!';
+}
+function pomoFinish(){
+  document.getElementById('pomo-fab').className='pomo-fab';
+  if(pomoIsWork){
+    pomoCycles++;pomoIsWork=false;
+    const isLong=pomoCycles%4===0;
+    pomoRemaining=isLong?POMO_LONG:POMO_SHORT;
+    document.getElementById('pomo-mode-label').textContent=isLong?'☕ Istirahat Panjang (15 menit)!':'😌 Istirahat Pendek (5 menit)!';
+    playBeep(880,300);
+    toast('✅ Kerja keras! Waktunya istirahat sejenak 🌿');
+    nextQuote();
+  }else{
+    pomoIsWork=true;pomoRemaining=POMO_WORK;
+    document.getElementById('pomo-mode-label').textContent='🎯 Sesi Fokus ke-'+(pomoCycles+1)+' — Ayo fokus lagi!';
+    playBeep(440,200);
+    toast('🍅 Istirahat selesai — waktunya fokus kembali!');
+  }
+  document.getElementById('pomo-cycle').textContent='Siklus: '+pomoCycles+' / 4';
+  updatePomoUI();
+  if(pomoPanelOpen)document.getElementById('pomo-panel').style.display='block';
+  document.getElementById('pomo-float').style.display='block';
+}
+function updatePomoUI(){
+  const total=pomoIsWork?POMO_WORK:(pomoCycles%4===0?POMO_LONG:POMO_SHORT);
+  const m=Math.floor(pomoRemaining/60).toString().padStart(2,'0');
+  const s=(pomoRemaining%60).toString().padStart(2,'0');
+  document.getElementById('pomo-time').textContent=m+':'+s;
+  const circ=314.16;
+  const offset=circ*(pomoRemaining/total);
+  const ring=document.getElementById('pomo-ring');
+  if(ring){ring.style.strokeDashoffset=offset;ring.style.stroke=pomoIsWork?'var(--green3)':'var(--blue)';}
+}
+function playBeep(freq,dur){
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    const o=ctx.createOscillator();const g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);
+    o.frequency.value=freq;o.type='sine';
+    g.gain.setValueAtTime(0.3,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur/1000);
+    o.start();o.stop(ctx.currentTime+dur/1000);
+  }catch(e){}
+}
+
+/* ════════════════════════════════════════════
+   FEATURE 5: COLLABORATION / REVIEW MODE
+════════════════════════════════════════════ */
+function prefillCollab(){
+  const el=document.getElementById('collab-nama');
+  if(el&&!el.value&&currentUser)el.value=currentUser.nama||'';
+  const ju=document.getElementById('collab-judul');
+  const lastSidang=getHistory().find(h=>h.type==='sidang');
+  if(ju&&!ju.value&&lastSidang?.extra?.judul)ju.value=lastSidang.extra.judul;
+}
+
+function previewReport(){
+  const html=buildReportHTML(true);
+  const el=document.getElementById('rp-body');
+  const wrap=document.getElementById('report-preview');
+  el.innerHTML=html;
+  wrap.style.display='block';
+  wrap.scrollIntoView({behavior:'smooth',block:'start'});
+  toast('👁 Preview laporan siap!');
+}
+
+function downloadReport(){
+  const nama=document.getElementById('collab-nama').value||currentUser?.nama||'Mahasiswa';
+  const nim=document.getElementById('collab-nim').value||'—';
+  const judul=document.getElementById('collab-judul').value||'—';
+  const dosen=document.getElementById('collab-dosen').value||'Dosen Pembimbing';
+  const notes=document.getElementById('collab-notes').value||'';
+  const fullHtml=buildFullReportHTML(nama,nim,judul,dosen,notes);
+  const blob=new Blob([fullHtml],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  const safe=nama.replace(/[^a-zA-Z0-9]/g,'_');
+  a.download=`Laporan_${safe}_${new Date().toISOString().slice(0,10)}.html`;
+  a.click();
+  toast('✅ Laporan berhasil diunduh!');
+}
+
+function buildReportHTML(preview){
+  const hist=getHistory();
+  const prog=getProgData();
+  const bib=getBiblio();
+  const done=Object.keys(prog.chapters).length;
+  const chapNames={1:'Bab 1 — Pendahuluan',2:'Bab 2 — Tinjauan Pustaka',3:'Bab 3 — Metodologi',4:'Bab 4 — Hasil & Pembahasan',5:'Bab 5 — Kesimpulan'};
+  const sidangSess=hist.filter(h=>h.type==='sidang').slice(0,3);
+  const analisisSess=hist.filter(h=>h.type==='analisis').slice(0,6);
+  let html=`<div class="rp-section">
+    <div class="rp-section-title">📊 Progress Skripsi</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+      ${[1,2,3,4,5].map(n=>`<span style="padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;background:${prog.chapters[n]?'#d8f3dc':'#f2efe8'};color:${prog.chapters[n]?'#1b4332':'#5a574e'};border:1px solid ${prog.chapters[n]?'#95d5b2':'#ccc8bc'}">${prog.chapters[n]?'✅':'⬜'} ${chapNames[n]}</span>`).join('')}
+    </div>
+    <div style="font-size:12px;color:#5a574e"><strong>${done}/5 bab selesai</strong> · Progress: ${Math.round((done/5)*100)}%</div>
+  </div>`;
+  if(sidangSess.length){html+=`<div class="rp-section"><div class="rp-section-title">⚖️ Hasil Sidang Virtual</div>`+sidangSess.map(s=>`<div class="rp-item"><div class="rp-item-label">${new Date(s.date).toLocaleDateString('id-ID')} — Nilai: <strong>${s.extra?.grade||'—'}</strong></div>${escHtml(s.content?.substring(0,300)||'')}…</div>`).join('')+'</div>';}
+  if(analisisSess.length){html+=`<div class="rp-section"><div class="rp-section-title">📖 Analisis Bab Terakhir</div>`+analisisSess.map(s=>`<div class="rp-item"><div class="rp-item-label">${escHtml(s.title||'')} · ${new Date(s.date).toLocaleDateString('id-ID')}</div>${escHtml(s.content?.substring(0,250)||'')}…</div>`).join('')+'</div>';}
+  if(bib.length){html+=`<div class="rp-section"><div class="rp-section-title">📚 Daftar Pustaka (${bib.length} referensi)</div>`+bib.slice(0,10).map((b,i)=>`<div class="rp-item">${i+1}. ${escHtml(b.apa||b.title||'')}</div>`).join('')+(bib.length>10?`<div style="font-size:11px;color:#8a8780">… dan ${bib.length-10} referensi lainnya</div>`:'')+`</div>`;}
+  return html;
+}
+
+function buildFullReportHTML(nama,nim,judul,dosen,notes){
+  const today=new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const bodyContent=buildReportHTML(false);
+  const notesHtml=notes?`<div style="background:#fdf3e3;border:1px solid #e8c97a;border-radius:8px;padding:16px;margin-bottom:24px"><h3 style="font-family:'Georgia',serif;color:#b5843a;margin-bottom:8px">📝 Catatan &amp; Pertanyaan untuk Dosen</h3><p style="font-size:13px;line-height:1.7;white-space:pre-wrap">${escHtml(notes)}</p></div>`:'';
+  return`<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Laporan Bimbingan — ${escHtml(nama)}</title>
+<style>
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f7f4ee;color:#1e1c18;max-width:800px;margin:0 auto;padding:24px}
+.cover{background:linear-gradient(135deg,#1b4332,#2d6a4f);color:#fff;border-radius:12px;padding:36px 32px;margin-bottom:24px;text-align:center}
+.cover h1{font-family:'Georgia',serif;font-size:22px;margin-bottom:8px}
+.cover p{font-size:13px;opacity:.85;margin:4px 0}
+.section{background:#fff;border:1px solid #ddd9ce;border-radius:10px;padding:20px;margin-bottom:16px}
+.section h2{font-family:'Georgia',serif;font-size:16px;color:#1b4332;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #ddd9ce}
+.item{background:#f2efe8;border-radius:6px;padding:10px 12px;margin-bottom:8px;font-size:12px;line-height:1.65}
+.item-label{font-weight:700;color:#5a574e;margin-bottom:3px;font-size:11px}
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:600}
+.badge-ok{background:#d8f3dc;color:#1b4332}.badge-pending{background:#f2efe8;color:#5a574e}
+.footer{text-align:center;font-size:11px;color:#8a8780;margin-top:24px;padding-top:16px;border-top:1px solid #ddd9ce}
+</style></head><body>
+<div class="cover">
+  <div style="font-size:32px;margin-bottom:12px">🎓</div>
+  <h1>Laporan Kemajuan Bimbingan Skripsi</h1>
+  <p><strong>${escHtml(nama)}</strong> · NIM: ${escHtml(nim)}</p>
+  <p style="font-size:12px;opacity:.7;margin-top:4px">${escHtml(judul)}</p>
+  <div style="margin-top:16px;background:#ffffff22;border-radius:8px;padding:10px;font-size:12px">
+    <strong>Kepada:</strong> ${escHtml(dosen)} &nbsp;|&nbsp; <strong>Tanggal:</strong> ${today}
+  </div>
+</div>
+${notesHtml}
+<div style="background:#fff;border:1px solid #ddd9ce;border-radius:10px;padding:20px;margin-bottom:16px">
+  <h2 style="font-family:'Georgia',serif;font-size:16px;color:#1b4332;margin-bottom:12px">Ringkasan Aktivitas Thesis Co-Pilot</h2>
+  ${bodyContent.replace(/class="rp-section"/g,'class="section"').replace(/class="rp-section-title"/g,'class=""').replace(/class="rp-item"/g,'class="item"').replace(/class="rp-item-label"/g,'class="item-label"')}
+</div>
+<div class="footer">Dibuat menggunakan Thesis Co-Pilot Ultra-Smart Edition v5 · ${today}<br>Dokumen ini hanya sebagai alat bantu dan tidak menggantikan bimbingan resmi.</div>
+</body></html>`;
+}
+</script>
+</body>
+</html>
